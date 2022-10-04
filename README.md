@@ -9,3 +9,6 @@ Workflow:
 	After making changes:
 		- Commit changes to own repository
 		- On github make a pull request
+
+To make a fork:
+	Use the fork button :)
