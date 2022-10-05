@@ -189,6 +189,9 @@ void UART_menu (void *argument)
 		  	  	  UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				  break;
 
+		case '9': Toggle_Frequency();
+				  break;
+
 		case 'M': DisplayMenu(); /// M: Displays het menu (zie my_app.c)
 				  break;
 

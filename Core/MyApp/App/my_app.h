@@ -33,6 +33,8 @@ extern QueueHandle_t 	  hUART_Queue;
 extern SemaphoreHandle_t  hLED_Sem;
 /// handle voor ARM-keys-event
 extern EventGroupHandle_t hKEY_Event;
+/// handle voor speaker timer
+extern TIM_HandleTypeDef htim3;
 
 
 /// debug naar uart output, zie uart_keys.c
@@ -91,6 +93,9 @@ extern void UART_menu     (void *);
 
 // student.c
 extern void Student_task1 (void *);
-void Change_Frequency(int);
 
+// speaker.c
+extern void Speaker_Init();
+extern void Change_Frequency(int);
+extern void Toggle_Frequency();
 

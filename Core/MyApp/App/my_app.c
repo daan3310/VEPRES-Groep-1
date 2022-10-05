@@ -72,6 +72,7 @@ void DisplayMenu(void)
 3: [on/off] UART_keys output\r\n\
 4: [on/off] STUDENT output\r\n\
 5: [on/off] reserved output\r\n\
+9: [toggle] switch between 2200 Hz and 2800 Hz \r\n\
 d: change Delay time (default 200), eg. 'd,50'\r\n\
 p: change Priority of task, eg. 'p,7,20' sets priority of task 7 to 20\r\n\
 t: display Task-data (number, priority, stack usage)\r\n\

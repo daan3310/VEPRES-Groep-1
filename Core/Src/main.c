@@ -129,10 +129,8 @@ int main(void)
   DisplayVersion();
   osDelay(500); // time to read version
 
-  // Initialising pwm output, default 1 kHz
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
-  TIM3->ARR = 1000-1;
-  TIM3->CCR3 = 500-1;
+  // Initialising speaker output
+  Speaker_Init();
 
   /* USER CODE END 2 */
 
@@ -353,9 +351,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 96-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period = 100;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
