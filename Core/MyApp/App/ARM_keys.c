@@ -64,7 +64,6 @@ void ARM_keys_IRQ (void *argument)
 void ARM_keys_task (void *argument)
 {
 	uint32_t 	 key;
-//	int			 i, led;
 
 	while(TRUE)
 	{
