@@ -12,5 +12,3 @@ Workflow:
 
 To make a fork:
 	Use the fork button :)
-
-Dit is een test van daniel
