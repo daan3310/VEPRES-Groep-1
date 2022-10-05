@@ -5,7 +5,6 @@ Workflow:
 	Before making changes:
 		- Update branch on github
 		- Pull from your own repository
-	
 	After making changes:
 		- Commit changes to own repository
 		- On github make a pull request
