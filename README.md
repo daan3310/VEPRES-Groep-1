@@ -1,7 +1,7 @@
 # VEPRES-Groep-1
 Project 1 van jaar 2
 
-Workflow:
+Workflow: \n
 	Before making changes:
 		- Update branch on github
 		- Pull from your own repository
