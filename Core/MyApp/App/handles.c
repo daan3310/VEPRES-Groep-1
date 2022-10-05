@@ -64,14 +64,7 @@ void CreateHandles(void)
 	if (!(hKEY_Event = xEventGroupCreate()))
 		error_HaltOS("Error hLCD_Event");
 
-	if (!(hTimer1 = xTimerCreate("Timer_1", pdMS_TO_TICKS(TIMER1_DELAY), pdTRUE, 0, Timer1_Handler)))
-		error_HaltOS("Error hTimer1");
-
 	UART_puts("\n\rAll handles created successfully.");
-
-	UART_puts("\n\rTimer set to: ");
-	UART_putint((int)TIMER1_DELAY); // (int)-cast is nodig!
-	xTimerStart(hTimer1, 0); // start de timer...
 }
 
 

@@ -33,8 +33,6 @@ extern QueueHandle_t 	  hUART_Queue;
 extern SemaphoreHandle_t  hLED_Sem;
 /// handle voor ARM-keys-event
 extern EventGroupHandle_t hKEY_Event;
-/// handle voor software timer
-extern TimerHandle_t      hTimer1;
 
 
 /// debug naar uart output, zie uart_keys.c
@@ -82,12 +80,6 @@ extern void         SetTaskPriority (int, int);
 // handles.c
 extern void         CreateHandles   (void);
 
-// LEDS.c
-extern void LED_Task1   (void *);
-extern void LED_Task2   (void *);
-extern void LED_Task3   (void *);
-extern void LED_Task4   (void *);
-
 // ARM_keys.c
 extern void ARM_keys_IRQ (void *);
 extern void ARM_keys_task(void *);
@@ -99,8 +91,5 @@ extern void UART_menu     (void *);
 
 // student.c
 extern void Student_task1 (void *);
-
-// timer.c
-extern void Timer1_Handler(TimerHandle_t);
 
 

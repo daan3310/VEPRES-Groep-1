@@ -64,7 +64,7 @@ void ARM_keys_IRQ (void *argument)
 void ARM_keys_task (void *argument)
 {
 	uint32_t 	 key;
-	int			 i, led;
+//	int			 i, led;
 
 	while(TRUE)
 	{
@@ -74,27 +74,15 @@ void ARM_keys_task (void *argument)
     	                 &key, 				// Notified value.
     	                 portMAX_DELAY);  	// Block indefinitely.
 
-	    xSemaphoreTake(hLED_Sem, portMAX_DELAY); // krijg toegang (mutex) tot leds
-
     	LED_put((unsigned char)key); // set 8 leds-byte to key-value
 	    BUZZER_put (500);
 		osDelay(500);
 
 		if (Uart_debug_out & ARMKEYS_DEBUG_OUT)
 		{
-			UART_puts("\r\n\tARM_key pressed to leds: "); UART_putint(key);
+			UART_puts("\r\n\tARM_key pressed: "); UART_putint(key);
 		}
 
-	    xSemaphoreGive(hLED_Sem); // geef toegang (mutex) vrij
-
-	    // tot slot, laat de gekleurde ledjes meedoen
-	    // maar niet blauw, want die is ingezet voor de timer
-	    // kijk naar de manier waarop de if-elses er uitzien
-		for (i=0; i<3; i++)
-		{
-			led = (i==0 ? LEDRED : (i==1 ? LEDORANGE : LEDGREEN));
-			toggle_led(led);
-	  	}
      	taskYIELD(); // done, force context switch
 	}
 }

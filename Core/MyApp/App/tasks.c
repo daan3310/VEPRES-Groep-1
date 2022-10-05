@@ -65,14 +65,6 @@ TASKDATA tasks[] =
 { UART_keys_IRQ,NULL, .attr.name = "UART_keys_IRQ",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal5 },
 { UART_menu,    NULL, .attr.name = "UART_menu",    .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal6 },
 
-  // mutex.c
-  // NOTE: mutextasks 1 & 2 moeten dezelfde priority hebben, anders 'sterft' de taak met de laagste priority
-  //       wat wel kan: afdwingen dat taken aan de beurt komen door notifications, zie mutextasks 3 & 4
-{ LED_Task1,    NULL, .attr.name = "LED_Task1",    .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal4 },
-{ LED_Task2,    NULL, .attr.name = "LED_Task2",    .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal4 },
-{ LED_Task3,    NULL, .attr.name = "LED_Task3",    .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal5 },
-{ LED_Task4,    NULL, .attr.name = "LED_Task4",    .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal4 },
-
   // student.c
 { Student_task1,NULL, .attr.name = "Student_task1",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
 
