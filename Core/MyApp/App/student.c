@@ -34,3 +34,14 @@ void Student_task1 (void *argument)
     	}
 	}
 }
+
+/**
+ * @brief Veranderd de frequentie van timer 3
+ * @param int De gewenste frequentie
+ * @return void
+ */
+void Change_Frequency(int frequency)
+{
+	TIM3->ARR = 1000000 / frequency -1;
+	TIM3->CCR3 = 1000000 / (frequency*2) -1;
+}

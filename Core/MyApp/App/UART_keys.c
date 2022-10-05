@@ -135,6 +135,7 @@ void UART_menu (void *argument)
 	char   *s;
 	char   *tok = ",";  // token if command is more than 1 char
 	int     val1, val2;
+	int 	input;
 
 	UART_puts((char *)__func__); UART_puts("started\n\r");
 
@@ -204,6 +205,14 @@ void UART_menu (void *argument)
 				  s = strtok(NULL, tok); val2 = atoi(s); // volgende = priority
 				  if (val1 && val2)						 // kleine validiteitscontrole
 					  SetTaskPriority(val1, val2);
+				  break;
+
+		case 'B': /// P: Veranderd de output frequentie van de buzzer
+				  /// commando: <b>"b,200"</b> betekent: set frequentie op 200, NB: spaties worden niet afgevangen...
+				  input = atoi(s+2); // skip first 2 characters
+				  UART_puts("\r\n Frequency set to: ");
+				  UART_putint(input);
+				  Change_Frequency(input);
 				  break;
 		}
 	}

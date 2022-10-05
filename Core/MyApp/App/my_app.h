@@ -91,5 +91,6 @@ extern void UART_menu     (void *);
 
 // student.c
 extern void Student_task1 (void *);
+void Change_Frequency(int);
 
 
