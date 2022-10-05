@@ -74,7 +74,7 @@ void ARM_keys_task (void *argument)
     	                 portMAX_DELAY);  	// Block indefinitely.
 
     	LED_put((unsigned char)key); // set 8 leds-byte to key-value
-	    BUZZER_put (500);
+//	    BUZZER_put (500);
 		osDelay(500);
 
 		if (Uart_debug_out & ARMKEYS_DEBUG_OUT)

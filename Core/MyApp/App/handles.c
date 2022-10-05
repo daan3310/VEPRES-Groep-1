@@ -40,7 +40,7 @@ void error_HaltOS(char *msg)
 	LCD_puts(msg);
 	UART_puts(msg); UART_puts(". Application halted\r\n");
 
-	BUZZER_put(1000);
+//	BUZZER_put(1000);
 	vTaskSuspendAll(); // stop alle tasks
 
 	while (TRUE)
