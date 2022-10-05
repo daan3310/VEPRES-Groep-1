@@ -37,7 +37,6 @@ extern "C" {
 #include "keys.h"
 #include "leds.h"
 #include "uart.h"
-#include "buzzer.h"
 
 
 #include <stdarg.h>
