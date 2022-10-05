@@ -75,6 +75,7 @@ void DisplayMenu(void)
 d: change Delay time (default 200), eg. 'd,50'\r\n\
 p: change Priority of task, eg. 'p,7,20' sets priority of task 7 to 20\r\n\
 t: display Task-data (number, priority, stack usage)\r\n\
+b: change frequency (default 1 kHz), eg. 'b,2500'\r\n\
 ===================================================================\r\n";
 
     UART_puts(menu);
