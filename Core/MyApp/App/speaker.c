@@ -10,7 +10,11 @@
 
 unsigned int toggle = 0;
 
-
+/**
+ * @brief initialiseert de timer voor het gebruik van de speaker
+ * @param
+ * @return void
+ */
 void Speaker_Init()
 {
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
