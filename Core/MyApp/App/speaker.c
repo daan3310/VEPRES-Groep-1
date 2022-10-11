@@ -58,3 +58,23 @@ void Toggle_Frequency()
 	toggle = !toggle;
 }
 
+/**
+ * @brief toggles between high and low bytes*samplerate times, blocking
+ * @param int amount of bytes to transmit
+ * @return void
+ */
+void Sync_Bytes(int bytes)
+{
+	int i;
+
+	UART_puts("\nRunning Syncbytes");
+	toggle = 0; // always start at 0
+
+	for(i = 0; i <= bytes*2; i++)
+	{
+		Toggle_Frequency();
+
+		vTaskDelay(SAMPLERATE);
+	}
+}
+

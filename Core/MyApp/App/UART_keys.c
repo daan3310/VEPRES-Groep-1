@@ -188,6 +188,8 @@ void UART_menu (void *argument)
 		  	  	  UART_puts("\r\nreserved1 output = ");
 		  	  	  UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				  break;
+		case '8': Sync_Bytes(20);
+				  break;
 
 		case '9': Toggle_Frequency();
 				  break;

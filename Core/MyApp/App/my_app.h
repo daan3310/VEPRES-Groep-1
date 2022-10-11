@@ -95,7 +95,12 @@ extern void UART_menu     (void *);
 extern void Student_task1 (void *);
 
 // speaker.c
+#define SAMPLERATE 20
+#define FREQHIGH 2800
+#define FREQLOW 2200
+
 extern void Speaker_Init();
 extern void Change_Frequency(int);
 extern void Toggle_Frequency();
+extern void Sync_Bytes();
 
