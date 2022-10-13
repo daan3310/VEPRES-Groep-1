@@ -150,79 +150,88 @@ void UART_menu (void *argument)
 		// letters te checken.
 		switch (toupper((unsigned char)s[0]))
 		{
-		default:  UART_puts(s);
-				  UART_puts(" (unkown command)\r\n");
-				  break;
+			default:
+				UART_puts(s);
+				UART_puts(" (unkown command)\r\n");
+				break;
 
-		/// <b>0 - 5</b>: Togglet verschillende debug-outputs naar UART
-		case '0': Uart_debug_out = (Uart_debug_out ? DEBUG_OUT_NONE : DEBUG_OUT_ALL);
-		  	  	  UART_puts("\r\nall debug output = ");
-		  	  	  UART_puts(Uart_debug_out == DEBUG_OUT_ALL ? "ON\r\n" : "OFF\r\n");
+			/// <b>0 - 5</b>: Togglet verschillende debug-outputs naar UART
+			case '0':
+				Uart_debug_out = (Uart_debug_out ? DEBUG_OUT_NONE : DEBUG_OUT_ALL);
+				UART_puts("\r\nall debug output = ");
+				UART_puts(Uart_debug_out == DEBUG_OUT_ALL ? "ON\r\n" : "OFF\r\n");
 
-		  	  	  // als alle output uitgezet wordt, is het handig om gelijk het menu te laten zien.
-		  	  	  if (Uart_debug_out == DEBUG_OUT_NONE)
-		  	  		  DisplayMenu();
-				  break;
+				// als alle output uitgezet wordt, is het handig om gelijk het menu te laten zien.
+				if (Uart_debug_out == DEBUG_OUT_NONE)
+					DisplayMenu();
+				break;
 
-		case '1': Uart_debug_out ^= LEDS_DEBUG_OUT; // toggle output on/off
-				  UART_puts("\r\nleds output = ");
-				  UART_puts(Uart_debug_out & LEDS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '1':
+				Uart_debug_out ^= LEDS_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nleds output = ");
+				UART_puts(Uart_debug_out & LEDS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '2': Uart_debug_out ^= ARMKEYS_DEBUG_OUT; // toggle output on/off
-		  	      UART_puts("\r\narmkeys output = ");
-		  	      UART_puts(Uart_debug_out & ARMKEYS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '2':
+				Uart_debug_out ^= ARMKEYS_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\narmkeys output = ");
+				UART_puts(Uart_debug_out & ARMKEYS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '3': Uart_debug_out ^= UART_DEBUG_OUT; // toggle output on/off
-		  	      UART_puts("\r\nuart output = ");
-		  	      UART_puts(Uart_debug_out & UART_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '3':
+				Uart_debug_out ^= UART_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nuart output = ");
+				UART_puts(Uart_debug_out & UART_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '4': Uart_debug_out ^= STUDENT_DEBUG_OUT; // toggle output on/off
-		  	  	  UART_puts("\r\nstudent output = ");
-		  	  	  UART_puts(Uart_debug_out & STUDENT_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '4':
+				Uart_debug_out ^= STUDENT_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nstudent output = ");
+				UART_puts(Uart_debug_out & STUDENT_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '5': Uart_debug_out ^= RES1_DEBUG_OUT; // toggle output on/off
-		  	  	  UART_puts("\r\nreserved1 output = ");
-		  	  	  UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '5':
+				Uart_debug_out ^= RES1_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nreserved1 output = ");
+				UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '7': Tx_Hex_as_Bits();
-				  break;
+			case '7': // test case
+				break;
 
-		case '8': Sync_Bytes(20);
-				  break;
+			case '8': Sync_Bytes(20);
+				break;
 
-		case '9': Toggle_Frequency();
-				  break;
+			case '9': Toggle_Frequency();
+				break;
 
-		case 'M': DisplayMenu(); /// M: Displays het menu (zie my_app.c)
-				  break;
+			case 'M': DisplayMenu(); /// M: Displays het menu (zie my_app.c)
+				break;
 
-		case 'T': DisplayTaskData(); /// T: Displays de stackdata van alle Tasks
-				  break;
+			case 'T': DisplayTaskData(); /// T: Displays de stackdata van alle Tasks
+				break;
 
-		case 'P': /// P: Verandert de Proriteit van een taak
-				  /// commando, als: <b>"t,9,20"</b> betekent: set Task 9 op priority 20
-				  //  eerst: de 2 waarden worden uit de string gehaald met strtok()
-			      //  dan: de strings worden naar int geconverteerd
-				  //  nb. dit is wel grof geprogrammeerd zo, in het echt maak je hier een mooie functie van.
-			      s = strtok(s,    tok); 				 // naar start van string, negeer 't,'
-				  s = strtok(NULL, tok); val1 = atoi(s); // volgende = task_id
-				  s = strtok(NULL, tok); val2 = atoi(s); // volgende = priority
-				  if (val1 && val2)						 // kleine validiteitscontrole
-					  SetTaskPriority(val1, val2);
-				  break;
+			case 'P':
+				/// P: Verandert de Proriteit van een taak
+				/// commando, als: <b>"t,9,20"</b> betekent: set Task 9 op priority 20
+				//  eerst: de 2 waarden worden uit de string gehaald met strtok()
+				//  dan: de strings worden naar int geconverteerd
+				//  nb. dit is wel grof geprogrammeerd zo, in het echt maak je hier een mooie functie van.
+				s = strtok(s,    tok); 				 // naar start van string, negeer 't,'
+				s = strtok(NULL, tok); val1 = atoi(s); // volgende = task_id
+				s = strtok(NULL, tok); val2 = atoi(s); // volgende = priority
+				if (val1 && val2)						 // kleine validiteitscontrole
+					SetTaskPriority(val1, val2);
+				break;
 
-		case 'B': /// P: Veranderd de output frequentie van de buzzer
-				  /// commando: <b>"b,200"</b> betekent: set frequentie op 200, NB: spaties worden niet afgevangen...
-				  input = atoi(s+2); // skip first 2 characters
-				  UART_puts("\r\n Frequency set to: ");
-				  UART_putint(input);
-				  Change_Frequency(input);
-				  break;
+			case 'B':
+				/// P: Veranderd de output frequentie van de buzzer
+				/// commando: <b>"b,200"</b> betekent: set frequentie op 200, NB: spaties worden niet afgevangen...
+				input = atoi(s+2); // skip first 2 characters
+				UART_puts("\r\n Frequency set to: ");
+				UART_putint(input);
+				Change_Frequency(input);
+			break;
 		}
 	}
 }

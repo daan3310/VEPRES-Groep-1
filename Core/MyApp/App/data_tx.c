@@ -8,18 +8,15 @@
 #include "cmsis_os.h"
 #include "my_app.h"
 
-void Tx_Hex_as_Bits()
+void String_to_bits(char* p, int length)
 {
-	char* text = "Hello world!";
-	int length = strlen(text);
-//	int element = length-1;
-	unsigned char arrayChar[length];
-	unsigned char arrayBit[length*8];
+	unsigned char arrayChar[length]; // tijdelijke opslag characters
+	unsigned char arrayBit[length*8]; // tijdelijke opslag bits
 	int i, j, k = 0;
 
 	for(i = 0; i < length; i++) // string overzetten in een array
 	{
-		arrayChar[i] = text[i];
+		arrayChar[i] = p[i];
 		UART_putchar(arrayChar[i]);
 	}
 
@@ -34,14 +31,19 @@ void Tx_Hex_as_Bits()
 		k=0;
 	}
 
-	for(i = 0; i < length*8; i++) // debug print
+	if(1) // debug
 	{
-		UART_putint((int) arrayBit[i]);
-		if((1+i)%8==0)
+		UART_puts("\n");
+		for(i = 0; i < length*8; i++)
 		{
-			UART_puts("\n");
+			UART_putint((int) arrayBit[i]);
+			if((1+i)%8==0)
+			{
+				UART_puts("\n");
+			}
 		}
 	}
+
 
 	for(i = 0; i < length*8; i++) // maak geluid
 	{
@@ -52,13 +54,6 @@ void Tx_Hex_as_Bits()
 
 		vTaskDelay(SAMPLERATE);
 	}
-
-//	for(i = 0; i < 8; i++
-//	{
-//		arrayBit[i] = (*text >> i) & 0x01;
-//		UART_putint(arrayBit[i]);
-//	}
-
 }
 
 

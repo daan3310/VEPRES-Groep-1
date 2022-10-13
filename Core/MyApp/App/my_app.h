@@ -107,5 +107,5 @@ extern void Toggle_Frequency();
 extern void Sync_Bytes();
 
 //data.c
-extern void Tx_Hex_as_Bits();
+extern void String_to_bits(char*, int);
 
