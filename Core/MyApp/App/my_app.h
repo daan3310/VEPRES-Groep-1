@@ -12,11 +12,13 @@
 #include "queue.h"
 #include "task.h" // taskYield
 #include "semphr.h"
+#include "structs.h"
 
 #include "stdio.h"
 #include "string.h" // strtok, strcpy
 #include "stdlib.h" // atoi
 #include "ctype.h"  // toupper
+#include "math.h" // power
 
 #define TRUE  	   1
 #define FALSE      0
@@ -103,4 +105,7 @@ extern void Speaker_Init();
 extern void Change_Frequency(int);
 extern void Toggle_Frequency();
 extern void Sync_Bytes();
+
+//data.c
+extern void Tx_Hex_as_Bits();
 
