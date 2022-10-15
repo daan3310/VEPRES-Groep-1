@@ -136,6 +136,7 @@ void UART_menu (void *argument)
 	char   *tok = ",";  // token if command is more than 1 char
 	int     val1, val2;
 	int 	input;
+	char* testString = "Hoe gaat het?";
 
 	UART_puts((char *)__func__); UART_puts("started\n\r");
 
@@ -196,19 +197,24 @@ void UART_menu (void *argument)
 				UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
-			case '7': // test case
+			case '7':
+				String_to_bits(testString, strlen(testString));// test case
 				break;
 
-			case '8': Sync_Bytes(20);
+			case '8':
+				Sync_Bytes(20);
 				break;
 
-			case '9': Toggle_Frequency();
+			case '9':
+				Toggle_Frequency();
 				break;
 
-			case 'M': DisplayMenu(); /// M: Displays het menu (zie my_app.c)
+			case 'M':
+				DisplayMenu(); /// M: Displays het menu (zie my_app.c)
 				break;
 
-			case 'T': DisplayTaskData(); /// T: Displays de stackdata van alle Tasks
+			case 'T':
+				DisplayTaskData(); /// T: Displays de stackdata van alle Tasks
 				break;
 
 			case 'P':
