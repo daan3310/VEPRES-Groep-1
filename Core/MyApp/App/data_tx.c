@@ -37,7 +37,6 @@ void Send_data_task()
 			}
 		}
 
-
 		String_to_bits(buf, length);
 	}
 }
