@@ -75,8 +75,9 @@ void DisplayMenu(void)
 7: [toggle] test functie\r\n\
 8: [toggle] Start Sync_Bytes\r\n\
 9: [toggle] switch between 2200 Hz and 2800 Hz \r\n\
+t: transmit any sentence, maximum length is 64\
 p: change Priority of task, eg. 'p,7,20' sets priority of task 7 to 20\r\n\
-t: display Task-data (number, priority, stack usage)\r\n\
+d: display Task-data (number, priority, stack usage)\r\n\
 b: change frequency (default 1 kHz), eg. 'b,2500'\r\n\
 ===================================================================\r\n";
 

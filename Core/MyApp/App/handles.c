@@ -20,11 +20,12 @@
 #include "my_app.h"
 
 // all handles, note: defined to 'extern' in my_app.h
-QueueHandle_t 	   hKey_Queue;
-QueueHandle_t 	   hUART_Queue;
-SemaphoreHandle_t  hLED_Sem;
-EventGroupHandle_t hKEY_Event;
-TimerHandle_t      hTimer1;
+QueueHandle_t 	   	hKey_Queue;
+QueueHandle_t 	   	hUART_Queue;
+QueueHandle_t		hData_Queue;
+SemaphoreHandle_t  	hLED_Sem;
+EventGroupHandle_t 	hKEY_Event;
+TimerHandle_t      	hTimer1;
 
 
 /**
@@ -59,6 +60,9 @@ void CreateHandles(void)
 
 	if (!(hUART_Queue = xQueueCreate(QSIZE_UART, sizeof(unsigned int))))
 		error_HaltOS("Error hUART_Q");
+
+	if(!(hData_Queue = xQueueCreate(QSIZE_DATA, sizeof(char))))
+		error_HaltOS("Error hDATA_Queue");
 
 	if (!(hKEY_Event = xEventGroupCreate()))
 		error_HaltOS("Error hLCD_Event");
