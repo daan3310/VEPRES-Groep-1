@@ -34,7 +34,8 @@
 /// handle voor UART-queue
 extern QueueHandle_t 	  	hUART_Queue;
 /// handle voor data queue
-extern QueueHandle_t 		hData_Queue;
+extern QueueHandle_t 		hChar_Queue;
+extern QueueHandle_t 		hBit_Queue;
 /// handle voor LED-mutex
 extern SemaphoreHandle_t 	hLED_Sem;
 /// handle voor ARM-keys-event
@@ -112,6 +113,7 @@ extern void Toggle_Frequency();
 extern void Sync_Bytes();
 
 //data_tx.c
-extern void String_to_bits(char*, int);
+extern void Prep_data_task();
 extern void Send_data_task();
+extern void Char_to_bits(char*, char*, int);
 

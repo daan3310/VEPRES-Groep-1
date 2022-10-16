@@ -138,12 +138,10 @@ void UART_menu (void *argument)
 	int 	input;
 	osThreadId_t    hTask;
 
-	char* testString = "Hoe gaat het?"; // teststring voor string to bits
-
 	UART_puts((char *)__func__); UART_puts("started\n\r");
 
-	if (!(hTask = xTaskGetHandle("Send_data_task")))
-			error_HaltOS("Err:Send_data_task handle");
+	if (!(hTask = xTaskGetHandle("Prep_data_task")))
+			error_HaltOS("Error UART_menu: Send_data_task handle");
 
 	while (TRUE)
 	{
@@ -203,11 +201,11 @@ void UART_menu (void *argument)
 				break;
 
 			case '7':
-				String_to_bits(testString, strlen(testString));// test case
+				// test case 1
 				break;
 
 			case '8':
-				Sync_Bytes(20);
+				// test case 2
 				break;
 
 			case '9':
@@ -224,11 +222,15 @@ void UART_menu (void *argument)
 
 			case 'T':
 				s += 2;  // skip de ,
+
+				// blijf data in de Q stoppen zolang *s niet NULL is
 				while(*s != 0)
 				{
-					xQueueSend(hData_Queue, s, 0);
+					xQueueSend(hChar_Queue, s, 0);
 					s++;
 				}
+
+				// geef het stokje door aan Prep_data_task
 				xTaskNotifyGive(hTask);
 
 
