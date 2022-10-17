@@ -20,7 +20,6 @@
 #include "uart.h"
 
 extern unsigned int os_delay; /// deze waarde kan hier veranderd worden.
-
 /**
 * @brief Polt en leest characters in die de gebruiker via Terminalprogramma intikt.
 * 1. leest characters van uart
@@ -138,7 +137,7 @@ void UART_menu (void *argument)
 	int 	input;
 
 	UART_puts((char *)__func__); UART_puts("started\n\r");
-
+	char test1[16] = {0,0,1,1,1,1,1,0,1,0,0,1,1,1,1,0}; // bits naar datarx om te decoderen
 	while (TRUE)
 	{
 		// wacht op de string; let op de cast van (unsigned long) naar (char *)!
@@ -197,7 +196,7 @@ void UART_menu (void *argument)
 		case 'M': DisplayMenu(); /// M: Displays het menu (zie my_app.c)
 				  break;
 
-		case 'T': DisplayTaskData(); /// T: Displays de stackdata van alle Tasks
+		case 'T': DataRx1(test1); /// T: Disp0lays de stackdata van alle Tasks
 				  break;
 
 		case 'P': /// P: Verandert de Proriteit van een taak
