@@ -12,6 +12,7 @@
 #include "queue.h"
 #include "task.h" // taskYield
 #include "semphr.h"
+#include "math.h"
 #include "structs.h"
 
 #include "stdio.h"
@@ -101,6 +102,8 @@ extern void UART_menu     (void *);
 
 // student.c
 extern void Student_task1 (void *);
+// DataRx.c
+extern void DataRx1 (char*);
 
 // speaker.c
 #define SAMPLERATE 20
