@@ -13,29 +13,37 @@
 #include "task.h" // taskYield
 #include "semphr.h"
 #include "math.h"
+#include "structs.h"
 
 #include "stdio.h"
 #include "string.h" // strtok, strcpy
 #include "stdlib.h" // atoi
 #include "ctype.h"  // toupper
+#include "math.h" // power
 
 #define TRUE  	   1
 #define FALSE      0
 
 /// set queue op 10 elementen
-#define QSIZE_UART 10
+#define QSIZE_UART 64
 /// set software timer 500 msecs
 #define TIMER1_DELAY 500
+/// set data q max length
+#define QSIZE_DATA 64
 
 /// alle handles
 /// handle voor UART-queue
-extern QueueHandle_t 	  hUART_Queue;
+extern QueueHandle_t 	  	hUART_Queue;
+/// handle voor data queue
+extern QueueHandle_t 		hChar_Queue;
+extern QueueHandle_t 		hBit_Queue;
 /// handle voor LED-mutex
-extern SemaphoreHandle_t  hLED_Sem;
+extern SemaphoreHandle_t 	hLED_Sem;
 /// handle voor ARM-keys-event
-extern EventGroupHandle_t hKEY_Event;
+extern EventGroupHandle_t 	hKEY_Event;
 /// handle voor speaker timer
-extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef 	htim3;
+
 
 
 /// debug naar uart output, zie uart_keys.c
@@ -63,9 +71,9 @@ extern int Uart_debug_out;
 /// LD4_Pin
 #define LEDGREEN  GPIO_PIN_12
 /// LD3_Pin
-#define LEDRED    GPIO_PIN_13
+#define LEDRED    GPIO_PIN_14
 /// LD5_Pin
-#define LEDORANGE GPIO_PIN_14
+#define LEDORANGE GPIO_PIN_13
 /// LD6_Pin
 #define LEDBLUE   GPIO_PIN_15
 
@@ -106,4 +114,9 @@ extern void Speaker_Init();
 extern void Change_Frequency(int);
 extern void Toggle_Frequency();
 extern void Sync_Bytes();
+
+//data_tx.c
+extern void Prep_data_task();
+extern void Send_data_task();
+extern void Char_to_bits(char*, char*, int);
 

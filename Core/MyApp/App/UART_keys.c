@@ -33,13 +33,13 @@ void UART_keys_poll (void *argument)
 
 	osThreadId_t hTask = xTaskGetHandle("UART_menu");
 
-	UART_puts((char *)__func__); UART_puts("started, enter key on terminal\n\r");
+	UART_puts((char *)__func__); UART_puts(" started, enter key on terminal\n\r");
 
 	while(TRUE)
     {
 	    UART_gets(buffer, QSIZE_UART, TRUE); // wait for string
 
-    	xTaskNotify(hTask, buffer, eSetValueWithOverwrite); // notify task2 with value
+    	xTaskNotify(hTask, (int) buffer, eSetValueWithOverwrite); // notify task2 with value
 
 		if (Uart_debug_out & UART_DEBUG_OUT)
 		{
@@ -79,10 +79,10 @@ void UART_keys_IRQ (void *argument)
 		xQueueReceive(hUART_Queue, &buffer[pos], portMAX_DELAY);
 
 		// negeer dit char bij geen data: -1, 255, of CR of spatie
-		if (buffer[pos] == -1 || buffer[pos] == 255 || buffer[pos] == CRETURN || buffer[pos] == 32)
+		if (buffer[pos] == -1 || buffer[pos] == 255 || buffer[pos] == CRETURN)
 			continue;
 
-		//UART_putchar(buffer[pos]);  // echo
+//		UART_putchar(buffer[pos]);  // echo
 
 		// check of de string gesloten was of gesloten moet worden...
 		if (buffer[pos] == LFEED)     // close als LF gedrukt
@@ -106,7 +106,7 @@ void UART_keys_IRQ (void *argument)
 			finish = FALSE;
 			pos = 0;
 
-			xTaskNotify(hTask, buffer_copy, eSetValueWithOverwrite); // notify task2 with copy
+			xTaskNotify(hTask, (int) buffer_copy, eSetValueWithOverwrite); // notify task2 with copy
 
 			if (Uart_debug_out & UART_DEBUG_OUT)
 			{
@@ -135,9 +135,13 @@ void UART_menu (void *argument)
 	char   *tok = ",";  // token if command is more than 1 char
 	int     val1, val2;
 	int 	input;
+	osThreadId_t    hTask;
 
 	UART_puts((char *)__func__); UART_puts("started\n\r");
-	char test1[16] = {0,0,1,1,1,1,1,0,1,0,0,1,1,1,1,0}; // bits naar datarx om te decoderen
+  
+	if (!(hTask = xTaskGetHandle("Prep_data_task")))
+			error_HaltOS("Error UART_menu: Send_data_task handle");
+
 	while (TRUE)
 	{
 		// wacht op de string; let op de cast van (unsigned long) naar (char *)!
@@ -149,75 +153,111 @@ void UART_menu (void *argument)
 		// letters te checken.
 		switch (toupper((unsigned char)s[0]))
 		{
-		default:  UART_puts(s);
-				  UART_puts(" (unkown command)\r\n");
-				  break;
 
-		/// <b>0 - 5</b>: Togglet verschillende debug-outputs naar UART
-		case '0': Uart_debug_out = (Uart_debug_out ? DEBUG_OUT_NONE : DEBUG_OUT_ALL);
-		  	  	  UART_puts("\r\nall debug output = ");
-		  	  	  UART_puts(Uart_debug_out == DEBUG_OUT_ALL ? "ON\r\n" : "OFF\r\n");
+			default:
+				UART_puts(s);
+				UART_puts(" (unkown command)\r\n");
+				break;
 
-		  	  	  // als alle output uitgezet wordt, is het handig om gelijk het menu te laten zien.
-		  	  	  if (Uart_debug_out == DEBUG_OUT_NONE)
-		  	  		  DisplayMenu();
-				  break;
+			/// <b>0 - 5</b>: Togglet verschillende debug-outputs naar UART
+			case '0':
+				Uart_debug_out = (Uart_debug_out ? DEBUG_OUT_NONE : DEBUG_OUT_ALL);
+				UART_puts("\r\nall debug output = ");
+				UART_puts(Uart_debug_out == DEBUG_OUT_ALL ? "ON\r\n" : "OFF\r\n");
 
-		case '1': Uart_debug_out ^= LEDS_DEBUG_OUT; // toggle output on/off
-				  UART_puts("\r\nleds output = ");
-				  UART_puts(Uart_debug_out & LEDS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+				// als alle output uitgezet wordt, is het handig om gelijk het menu te laten zien.
+				if (Uart_debug_out == DEBUG_OUT_NONE)
+					DisplayMenu();
+				break;
 
-		case '2': Uart_debug_out ^= ARMKEYS_DEBUG_OUT; // toggle output on/off
-		  	      UART_puts("\r\narmkeys output = ");
-		  	      UART_puts(Uart_debug_out & ARMKEYS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '1':
+				Uart_debug_out ^= LEDS_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nleds output = ");
+				UART_puts(Uart_debug_out & LEDS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '3': Uart_debug_out ^= UART_DEBUG_OUT; // toggle output on/off
-		  	      UART_puts("\r\nuart output = ");
-		  	      UART_puts(Uart_debug_out & UART_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '2':
+				Uart_debug_out ^= ARMKEYS_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\narmkeys output = ");
+				UART_puts(Uart_debug_out & ARMKEYS_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '4': Uart_debug_out ^= STUDENT_DEBUG_OUT; // toggle output on/off
-		  	  	  UART_puts("\r\nstudent output = ");
-		  	  	  UART_puts(Uart_debug_out & STUDENT_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
+			case '3':
+				Uart_debug_out ^= UART_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nuart output = ");
+				UART_puts(Uart_debug_out & UART_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '5': Uart_debug_out ^= RES1_DEBUG_OUT; // toggle output on/off
-		  	  	  UART_puts("\r\nreserved1 output = ");
-		  	  	  UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				  break;
-		case '8': Sync_Bytes(20);
-				  break;
+			case '4':
+				Uart_debug_out ^= STUDENT_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nstudent output = ");
+				UART_puts(Uart_debug_out & STUDENT_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case '9': Toggle_Frequency();
-				  break;
+			case '5':
+				Uart_debug_out ^= RES1_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\nreserved1 output = ");
+				UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
 
-		case 'M': DisplayMenu(); /// M: Displays het menu (zie my_app.c)
-				  break;
+			case '7':
+				// test case 1
+				break;
 
-		case 'T': DataRx1(test1); /// T: Disp0lays de stackdata van alle Tasks
-				  break;
+			case '8':
+				// test case 2
+				break;
 
-		case 'P': /// P: Verandert de Proriteit van een taak
-				  /// commando, als: <b>"t,9,20"</b> betekent: set Task 9 op priority 20
-				  //  eerst: de 2 waarden worden uit de string gehaald met strtok()
-			      //  dan: de strings worden naar int geconverteerd
-				  //  nb. dit is wel grof geprogrammeerd zo, in het echt maak je hier een mooie functie van.
-			      s = strtok(s,    tok); 				 // naar start van string, negeer 't,'
-				  s = strtok(NULL, tok); val1 = atoi(s); // volgende = task_id
-				  s = strtok(NULL, tok); val2 = atoi(s); // volgende = priority
-				  if (val1 && val2)						 // kleine validiteitscontrole
-					  SetTaskPriority(val1, val2);
-				  break;
+			case '9':
+				Toggle_Frequency();
+				break;
 
-		case 'B': /// P: Veranderd de output frequentie van de buzzer
-				  /// commando: <b>"b,200"</b> betekent: set frequentie op 200, NB: spaties worden niet afgevangen...
-				  input = atoi(s+2); // skip first 2 characters
-				  UART_puts("\r\n Frequency set to: ");
-				  UART_putint(input);
-				  Change_Frequency(input);
-				  break;
+			case 'M':
+				DisplayMenu(); /// M: Displays het menu (zie my_app.c)
+				break;
+
+			case 'D':
+				DisplayTaskData(); /// T: Displays de stackdata van alle Tasks
+				break;
+
+			case 'T':
+				s += 2;  // skip de ,
+
+				// blijf data in de Q stoppen zolang *s niet NULL is
+				while(*s != 0)
+				{
+					xQueueSend(hChar_Queue, s, 0);
+					s++;
+				}
+
+				// geef het stokje door aan Prep_data_task
+				xTaskNotifyGive(hTask);
+
+
+			case 'P':
+				/// P: Verandert de Proriteit van een taak
+				/// commando, als: <b>"t,9,20"</b> betekent: set Task 9 op priority 20
+				//  eerst: de 2 waarden worden uit de string gehaald met strtok()
+				//  dan: de strings worden naar int geconverteerd
+				//  nb. dit is wel grof geprogrammeerd zo, in het echt maak je hier een mooie functie van.
+				s = strtok(s,    tok); 				 // naar start van string, negeer 't,'
+
+				s = strtok(NULL, tok); val1 = atoi(s); // volgende = task_id
+				s = strtok(NULL, tok); val2 = atoi(s); // volgende = priority
+
+				if (val1 && val2)						 // kleine validiteitscontrole
+					SetTaskPriority(val1, val2);
+
+				break;
+
+			case 'B':
+				/// P: Veranderd de output frequentie van de buzzer
+				/// commando: <b>"b,200"</b> betekent: set frequentie op 200, NB: spaties worden niet afgevangen...
+				input = atoi(s+2); // skip first 2 characters
+				UART_puts("\r\n Frequency set to: ");
+				UART_putint(input);
+				Change_Frequency(input);
+				break;
 		}
 	}
 }
