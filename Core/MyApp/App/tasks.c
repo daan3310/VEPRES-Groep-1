@@ -66,7 +66,10 @@ TASKDATA tasks[] =
 { UART_menu,    NULL, .attr.name = "UART_menu",    .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal6 },
 
 	// student.c
-{ Student_task1,NULL, .attr.name = "Student_task1",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+//{ Student_task1,NULL, .attr.name = "Student_task1",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+  // DataRx.c
+{ DataRx1,		NULL, .attr.name = "DataRx",	   .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+
 
 	// data_tx.c
 { Prep_data_task,NULL, .attr.name = "Prep_data_task",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },

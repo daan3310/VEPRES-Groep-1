@@ -20,7 +20,6 @@
 #include "uart.h"
 
 extern unsigned int os_delay; /// deze waarde kan hier veranderd worden.
-
 /**
 * @brief Polt en leest characters in die de gebruiker via Terminalprogramma intikt.
 * 1. leest characters van uart
@@ -139,7 +138,7 @@ void UART_menu (void *argument)
 	osThreadId_t    hTask;
 
 	UART_puts((char *)__func__); UART_puts("started\n\r");
-
+  
 	if (!(hTask = xTaskGetHandle("Prep_data_task")))
 			error_HaltOS("Error UART_menu: Send_data_task handle");
 
@@ -154,6 +153,7 @@ void UART_menu (void *argument)
 		// letters te checken.
 		switch (toupper((unsigned char)s[0]))
 		{
+
 			default:
 				UART_puts(s);
 				UART_puts(" (unkown command)\r\n");
@@ -231,6 +231,7 @@ void UART_menu (void *argument)
 				}
 
 				// geef het stokje door aan Prep_data_task
+				xTimerStart(hSample_Timer,0);
 				xTaskNotifyGive(hTask);
 
 

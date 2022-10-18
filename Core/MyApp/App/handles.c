@@ -24,9 +24,11 @@ QueueHandle_t 	   	hKey_Queue;
 QueueHandle_t 	   	hUART_Queue;
 QueueHandle_t		hChar_Queue;
 QueueHandle_t		hBit_Queue;
+QueueHandle_t		mBit_Queue;
 SemaphoreHandle_t  	hLED_Sem;
 EventGroupHandle_t 	hKEY_Event;
 TimerHandle_t      	hTimer1;
+TimerHandle_t		hSample_Timer;
 
 
 /**
@@ -68,8 +70,15 @@ void CreateHandles(void)
 	if(!(hBit_Queue = xQueueCreate(QSIZE_DATA*8, sizeof(char))))
 			error_HaltOS("Error hBit_Queue");
 
+	if(!(mBit_Queue = xQueueCreate(QSIZE_DATA*8, sizeof(char))))
+			error_HaltOS("Error mBit_Queue");
+
 	if (!(hKEY_Event = xEventGroupCreate()))
 		error_HaltOS("Error hLCD_Event");
+
+	if (!(hSample_Timer = xTimerCreate("Sample_timer", pdMS_TO_TICKS(20), pdTRUE, 0, Sample_Handler)))
+			error_HaltOS("Error hSample_Timer");
+
 
 	UART_puts("\n\rAll handles created successfully.");
 }
