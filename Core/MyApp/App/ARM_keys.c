@@ -148,10 +148,10 @@ void ARM_keys_task (void *argument)
 			sprintf(stringBuf, "Default");
 			break;
 		}
-		int s = 0;
+		char *s = stringBuf;
 		while(*s != 0)
 		{
-			xQueueSend(hChar_Queue, stringBuf[s], 0);
+			xQueueSend(hChar_Queue, s, 0);
 			s++;
 		}
 
