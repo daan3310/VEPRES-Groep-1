@@ -65,6 +65,10 @@ void ARM_keys_task (void *argument)
 {
 	uint32_t 	 key;
 	char stringBuf[30];
+	osThreadId_t    hTask;
+
+	if (!(hTask = xTaskGetHandle("Prep_data_task")))
+	error_HaltOS("Error UART_menu: Send_data_task handle");
 
 	while(TRUE)
 	{
@@ -149,7 +153,7 @@ void ARM_keys_task (void *argument)
 			break;
 		}
 		char *s = stringBuf;
-		while(*s != 0)
+		while(*s != 0)	//puts string to queue for tx
 		{
 			xQueueSend(hChar_Queue, s, 0);
 			s++;
@@ -159,6 +163,7 @@ void ARM_keys_task (void *argument)
 		{
 			UART_puts("\r\n\tARM_key pressed: "); UART_putint(key);
 		}
+		xTaskNotifyGive(hTask);	//gives task to tx
 
      	taskYIELD(); // done, force context switch
 	}
