@@ -78,7 +78,7 @@ void CreateHandles(void)
 
 	if (!(hSample_Timer = xTimerCreate("Sample_timer", pdMS_TO_TICKS(20), pdTRUE, 0, Sample_Handler)))
 			error_HaltOS("Error hSample_Timer");
-
+	xTimerStart(hSample_Timer,0);
 
 	UART_puts("\n\rAll handles created successfully.");
 }
