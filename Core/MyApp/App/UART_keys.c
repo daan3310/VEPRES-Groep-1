@@ -223,15 +223,21 @@ void UART_menu (void *argument)
 			case 'T':
 				s += 2;  // skip de ,
 
+				// print naar lcd
+				LCD_clear();
+				LCD_put("Transmit");
+				LCD_put(s);
+
+
 				// blijf data in de Q stoppen zolang *s niet NULL is
 				while(*s != 0)
 				{
 					xQueueSend(hChar_Queue, s, 0);
 					s++;
 				}
-
 				// geef het stokje door aan Prep_data_task
 				xTaskNotifyGive(hTask);
+				break;
 
 
 			case 'P':
