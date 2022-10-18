@@ -64,6 +64,7 @@ void ARM_keys_IRQ (void *argument)
 void ARM_keys_task (void *argument)
 {
 	uint32_t 	 key;
+	char stringBuf[30];
 
 	while(TRUE)
 	{
@@ -75,6 +76,84 @@ void ARM_keys_task (void *argument)
 
     	LED_put((unsigned char)key); // set 8 leds-byte to key-value
 		osDelay(500);
+
+
+		switch(key)
+		{
+		case 0:
+			sprintf(stringBuf, "Button 1");
+			break;
+
+		case 1:
+			sprintf(stringBuf, "Button 2");
+			break;
+
+		case 2:
+			sprintf(stringBuf, "Button 3");
+			break;
+
+		case 3:
+			sprintf(stringBuf, "Button 4");
+			break;
+
+		case 4:
+			sprintf(stringBuf, "Button 5");
+			break;
+
+		case 5:
+			sprintf(stringBuf, "Button 6");
+			break;
+
+		case 6:
+			sprintf(stringBuf, "Button 7");
+			break;
+
+		case 7:
+			sprintf(stringBuf, "Button 8");
+			break;
+
+		case 8:
+			sprintf(stringBuf, "Button 9");
+			break;
+
+		case 9:
+			sprintf(stringBuf, "Button 10");
+			break;
+
+		case 10:
+			sprintf(stringBuf, "Button 11");
+			break;
+
+		case 11:
+			sprintf(stringBuf, "Button 12");
+			break;
+
+		case 12:
+			sprintf(stringBuf, "Button 13");
+			break;
+
+		case 13:
+			sprintf(stringBuf, "Button 14");
+			break;
+
+		case 14:
+			sprintf(stringBuf, "Button 15");
+			break;
+
+		case 15:
+			sprintf(stringBuf, "Button 16");
+			break;
+
+		default:
+			sprintf(stringBuf, "Default");
+			break;
+		}
+		int s = 0;
+		while(*s != 0)
+		{
+			xQueueSend(hChar_Queue, stringBuf[s], 0);
+			s++;
+		}
 
 		if (Uart_debug_out & ARMKEYS_DEBUG_OUT)
 		{
