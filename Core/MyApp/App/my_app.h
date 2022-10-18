@@ -37,12 +37,15 @@ extern QueueHandle_t 	  	hUART_Queue;
 /// handle voor data queue
 extern QueueHandle_t 		hChar_Queue;
 extern QueueHandle_t 		hBit_Queue;
+extern QueueHandle_t 		mBit_Queue;
 /// handle voor LED-mutex
 extern SemaphoreHandle_t 	hLED_Sem;
 /// handle voor ARM-keys-event
 extern EventGroupHandle_t 	hKEY_Event;
 /// handle voor speaker timer
 extern TIM_HandleTypeDef 	htim3;
+
+extern TimerHandle_t hSample_Timer;
 
 
 
@@ -103,7 +106,9 @@ extern void UART_menu     (void *);
 // student.c
 extern void Student_task1 (void *);
 // DataRx.c
-extern void DataRx1 (char*);
+extern void DataRx1 ();
+//mmicrofoon.c
+extern void Sample_Handler(TimerHandle_t);
 
 // speaker.c
 #define SAMPLERATE 20

@@ -231,6 +231,7 @@ void UART_menu (void *argument)
 				}
 
 				// geef het stokje door aan Prep_data_task
+				xTimerStart(hSample_Timer,0);
 				xTaskNotifyGive(hTask);
 
 
