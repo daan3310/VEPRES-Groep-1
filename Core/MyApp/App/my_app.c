@@ -15,7 +15,7 @@
 #include "my_app.h"
 
 char *app_name    = "\r\n=== FreeRTOS_methods 1.0 ===\r\n";
-char *app_nameLCD = "VEPRES-Groep-1"; // max 16 chars
+char *app_nameLCD = "VEPRES  Groep 1"; // max 16 chars
 
 /// default: debug all output to uart
 int Uart_debug_out = DEBUG_OUT_NONE;
