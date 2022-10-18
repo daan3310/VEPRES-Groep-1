@@ -107,6 +107,11 @@ void Send_data_task()
 				Change_Frequency(FREQLOW);
 			osDelay(SAMPLERATE);
 		}
+		for(; i < 64 && length > 0; i++)
+		{
+			Change_Frequency(FREQLOW);
+			osDelay(SAMPLERATE);
+		}
 
 		// zet t ledje weer uit als we klaar zijn
 		if(length > 0)
