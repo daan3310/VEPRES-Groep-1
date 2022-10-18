@@ -84,67 +84,67 @@ void ARM_keys_task (void *argument)
 
 		switch(key)
 		{
-		case 0:
+		case 1:
 			sprintf(stringBuf, "Button 1");
 			break;
 
-		case 1:
+		case 2:
 			sprintf(stringBuf, "Button 2");
 			break;
 
-		case 2:
+		case 3:
 			sprintf(stringBuf, "Button 3");
 			break;
 
-		case 3:
+		case 4:
 			sprintf(stringBuf, "Button 4");
 			break;
 
-		case 4:
+		case 5:
 			sprintf(stringBuf, "Button 5");
 			break;
 
-		case 5:
+		case 6:
 			sprintf(stringBuf, "Button 6");
 			break;
 
-		case 6:
+		case 7:
 			sprintf(stringBuf, "Button 7");
 			break;
 
-		case 7:
+		case 8:
 			sprintf(stringBuf, "Button 8");
 			break;
 
-		case 8:
+		case 9:
 			sprintf(stringBuf, "Button 9");
 			break;
 
-		case 9:
+		case 10:
 			sprintf(stringBuf, "Button 10");
 			break;
 
-		case 10:
+		case 11:
 			sprintf(stringBuf, "Button 11");
 			break;
 
-		case 11:
+		case 12:
 			sprintf(stringBuf, "Button 12");
 			break;
 
-		case 12:
+		case 13:
 			sprintf(stringBuf, "Button 13");
 			break;
 
-		case 13:
+		case 14:
 			sprintf(stringBuf, "Button 14");
 			break;
 
-		case 14:
+		case 15:
 			sprintf(stringBuf, "Button 15");
 			break;
 
-		case 15:
+		case 16:
 			sprintf(stringBuf, "Button 16");
 			break;
 
@@ -163,6 +163,9 @@ void ARM_keys_task (void *argument)
 		{
 			UART_puts("\r\n\tARM_key pressed: "); UART_putint(key);
 		}
+		LCD_clear();
+		LCD_put("Transmit");
+		LCD_put(stringBuf);
 		xTaskNotifyGive(hTask);	//gives task to tx
 
      	taskYIELD(); // done, force context switch
