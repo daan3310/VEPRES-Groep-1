@@ -38,6 +38,7 @@ void Change_Frequency(int frequency)
 {
 	TIM3->ARR 	= 1000000 / frequency - 1;
 	TIM3->CCR3 	= 1000000 / (frequency * 2) - 1;
+	TIM3->CNT = 0;
 }
 
 /**

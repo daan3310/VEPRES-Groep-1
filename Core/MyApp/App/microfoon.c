@@ -21,7 +21,7 @@ uint8_t buf = 0;
 */
 void Sample_Handler(TimerHandle_t hSample_Timer)
 {
-HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
+	HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
 	int data =0;
 
 	Sample = (TIM2->CNT);

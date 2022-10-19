@@ -71,16 +71,13 @@ void Prep_data_task()
 void Send_data_task()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
-	UBaseType_t uxSavedInterruptStatus;
 	char BitBuf[QSIZE_DATA];
 	int i, length;
-	char SOC[] =
-					// uiteindelijke SOC
-					{1, 1, 1, 1,
-					1, 1, 1, 0};
+	char SOC[] =	{1, 1, 1, 1,
+					1, 1, 1, 0}; // 0xFE of 254
 
 	char EOT[] = 	{0, 0, 0, 0,
-					 0, 0, 1, 0};
+					 0, 0, 1, 0}; // 0x04 of 4
 
 
 	while(TRUE)
@@ -106,9 +103,6 @@ void Send_data_task()
 		if(length > 0)
 			HAL_GPIO_TogglePin(GPIOD, LEDRED);
 
-		//CRITICAL SECTION
-		uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-
 		// SOC sturen
 		for(i = 0; i < sizeof(SOC) && length > 0; i++)
 		{
@@ -116,8 +110,7 @@ void Send_data_task()
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
-
-			vTaskDelay(SAMPLERATE);
+			osDelay(SAMPLERATE);
 		}
 
 		// verstuur de bits met een snelheid van samplerate
@@ -127,7 +120,7 @@ void Send_data_task()
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
-			vTaskDelay(SAMPLERATE);
+			osDelay(SAMPLERATE);
 		}
 
 		// lengte aanvullen met NULL als dat nodig is
@@ -137,6 +130,7 @@ void Send_data_task()
 			vTaskDelay(SAMPLERATE);
 		}
 
+		// EOT sturen
 		for(i = 0; i < sizeof(EOT) && length > 0; i++)
 		{
 			if(EOT[i])
@@ -145,9 +139,6 @@ void Send_data_task()
 				Change_Frequency(FREQLOW);
 			vTaskDelay(SAMPLERATE);
 		}
-
-		//END OF CRITICAL SECTION
-		taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
 
 		// zet t ledje weer uit als we klaar zijn
 		if(length > 0)
