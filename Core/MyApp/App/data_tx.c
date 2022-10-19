@@ -127,7 +127,7 @@ void Send_data_task()
 		for(; i < 64 && length > 0; i++)
 		{
 			Change_Frequency(FREQLOW);
-			vTaskDelay(SAMPLERATE);
+			osDelay(SAMPLERATE);
 		}
 
 		// EOT sturen
@@ -137,7 +137,7 @@ void Send_data_task()
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
-			vTaskDelay(SAMPLERATE);
+			osDelay(SAMPLERATE);
 		}
 
 		// zet t ledje weer uit als we klaar zijn
