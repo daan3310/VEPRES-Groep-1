@@ -78,7 +78,7 @@ void Send_data_task()
 	while(TRUE)
 	{
 		// zet die buzzer uit als ie niet nodig is
-		Change_Frequency(0);
+		Disable_Speaker();
 
 		// tijdelijke 2 sec delay zodat je meerdere datablokken hoort
 		// uiteindelijk kan deze veel korter
@@ -107,6 +107,8 @@ void Send_data_task()
 				Change_Frequency(FREQLOW);
 			osDelay(SAMPLERATE);
 		}
+
+		// lengte aanvullen met NULL als dat nodig is
 		for(; i < 64 && length > 0; i++)
 		{
 			Change_Frequency(FREQLOW);

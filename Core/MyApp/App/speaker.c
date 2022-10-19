@@ -10,6 +10,12 @@
 
 unsigned int toggle = 0;
 
+void Disable_Speaker()
+{
+	TIM3->ARR = 0;
+	TIM3->CCR3 = 0;
+}
+
 /**
  * @brief initialiseert de timer voor het gebruik van de speaker
  * @param

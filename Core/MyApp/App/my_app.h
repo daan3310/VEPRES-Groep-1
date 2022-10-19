@@ -105,9 +105,9 @@ extern void UART_menu     (void *);
 
 // student.c
 extern void Student_task1 (void *);
-// DataRx.c
+// data_rx.c
 extern void DataRx1 ();
-//mmicrofoon.c
+// microfoon.c
 extern void Sample_Handler(TimerHandle_t);
 
 // speaker.c
@@ -119,6 +119,7 @@ extern void Speaker_Init();
 extern void Change_Frequency(int);
 extern void Toggle_Frequency();
 extern void Sync_Bytes();
+extern void Disable_Speaker();
 
 //data_tx.c
 extern void Prep_data_task();
