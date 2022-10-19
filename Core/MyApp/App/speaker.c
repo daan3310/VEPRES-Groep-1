@@ -38,7 +38,7 @@ void Change_Frequency(int frequency)
 {
 	TIM3->ARR 	= 1000000 / frequency - 1;
 	TIM3->CCR3 	= 1000000 / (frequency * 2) - 1;
-	TIM3->CNT = 0;
+	TIM3->CNT = 0; // set count to 0 to avoid register overflow
 }
 
 /**
@@ -47,26 +47,24 @@ void Change_Frequency(int frequency)
  */
 void Toggle_Frequency()
 {
-	int high = 2800;
-	int low = 2200;
-
 	if(toggle)
 	{
-		Change_Frequency(high);
+		Change_Frequency(FREQHIGH);
 		UART_puts("\r\nFrequency toggled: ");
-		UART_putint(high);
+		UART_putint(FREQHIGH);
 	}
 	else
 	{
-		Change_Frequency(low);
+		Change_Frequency(FREQLOW);
 		UART_puts("\r\nFrequency toggled: ");
-		UART_putint(low);
+		UART_putint(FREQLOW);
 	}
 
 	toggle = !toggle;
 }
 
 /**
+ * DEPRECATED
  * @brief toggles between high and low bytes*samplerate times, blocking
  * @param int amount of bytes to transmit
  * @return void
@@ -75,7 +73,7 @@ void Sync_Bytes(int bytes)
 {
 	int i;
 
-	UART_puts("\nRunning Syncbytes");
+	UART_puts("\r\nRunning Syncbytes");
 	toggle = 0; // always start at 0
 
 	for(i = 0; i <= bytes*2; i++)
