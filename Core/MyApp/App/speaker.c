@@ -14,6 +14,7 @@ void Disable_Speaker()
 {
 	TIM3->ARR = 0;
 	TIM3->CCR3 = 0;
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 0);
 }
 
 /**

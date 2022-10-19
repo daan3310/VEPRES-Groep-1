@@ -68,12 +68,12 @@ TASKDATA tasks[] =
 	// student.c
 //{ Student_task1,NULL, .attr.name = "Student_task1",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
   // DataRx.c
-{ DataRx1,		NULL, .attr.name = "DataRx",	   .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+//{ DataRx1,		NULL, .attr.name = "DataRx",	   .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
 
 
 	// data_tx.c
 { Prep_data_task,NULL, .attr.name = "Prep_data_task",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
-{ Send_data_task,NULL, .attr.name = "Send_data_task",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+{ Send_data_task,NULL, .attr.name = "Send_data_task",.attr.stack_size = 128 * 6, .attr.priority = osPriorityRealtime7 },
 
   // deze laatste niet wissen, wordt gebruik als 'terminator' in loops
 { NULL,         NULL, .attr.name = NULL,         .  attr.stack_size = 0,       .attr.priority = 0 }
