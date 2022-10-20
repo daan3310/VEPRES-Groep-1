@@ -2,7 +2,7 @@
 * @file microfoon.c
 * @brief Hier kunnen studenten hun eigen tasks aanmaken
 *
-* @author MSC
+* @author daniel roling
 
 * @date 5/5/2022
 */
@@ -21,8 +21,8 @@ uint8_t buf = 0;
 */
 void Sample_Handler(TimerHandle_t hSample_Timer)
 {
-HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
-	int data =0;
+	HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
+	int data = 0;
 
 	Sample = (TIM2->CNT);
 	TIM2->CNT=0;
@@ -32,7 +32,7 @@ HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
 	else
 		data = 0;
 	if(Sample > 10)
-	xQueueSend(mBit_Queue, &data, 0);
+		xQueueSend(mBit_Queue, &data, 0);
 
 }
 
