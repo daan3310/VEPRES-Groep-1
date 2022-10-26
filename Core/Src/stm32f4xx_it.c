@@ -205,7 +205,7 @@ void EXTI0_IRQHandler(void)
 void EXTI9_5_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI9_5_IRQn 0 */
-
+	  HAL_GPIO_EXTI_IRQHandler(Sample_int_Pin);
   /* USER CODE END EXTI9_5_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(Sample_int_Pin);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
@@ -247,7 +247,7 @@ void USART2_IRQHandler(void)
 void EXTI15_10_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
-
+	HAL_GPIO_EXTI_IRQHandler(Period_int_Pin);
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(Period_int_Pin);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */

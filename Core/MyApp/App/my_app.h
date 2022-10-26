@@ -15,6 +15,7 @@
 #include "math.h"
 #include "structs.h"
 
+#include "cmsis_os2.h"
 #include "stdio.h"
 #include "string.h" // strtok, strcpy
 #include "stdlib.h" // atoi
@@ -38,10 +39,19 @@ extern QueueHandle_t 	  	hUART_Queue;
 extern QueueHandle_t 		hChar_Queue;
 extern QueueHandle_t 		hBit_Queue;
 extern QueueHandle_t 		mBit_Queue;
+
 /// handle voor LED-mutex
 extern SemaphoreHandle_t 	hLED_Sem;
+/// handle voor State mutex (currently unused)
+extern SemaphoreHandle_t  hState;
+
 /// handle voor ARM-keys-event
 extern EventGroupHandle_t 	hKEY_Event;
+/// handle voor Sample event
+extern EventGroupHandle_t hSample_Event;
+/// handle voor State event (currently unused)
+extern EventGroupHandle_t hState_Event;
+
 /// handle voor speaker timer
 extern TIM_HandleTypeDef 	htim3;
 
@@ -68,7 +78,7 @@ extern int Uart_debug_out;
 /// bit 5: toggles reserved1 output
 #define RES1_DEBUG_OUT 		0x10
 /// bit 6: toggles reserved2 output
-#define RES2_DEBUG_OUT 	    0x24
+#define SAMPLE_DEBUG_OUT 	    0x24
 
 /// Redefine pins om beter aan te geven waar het om gaat: gekleurde ledjes
 /// LD4_Pin
@@ -109,9 +119,18 @@ extern void Student_task1 (void *);
 extern void DataRx ();
 // microfoon.c
 extern void Sample_Handler(TimerHandle_t);
+extern void Period_time(void);
+//ExTim.c
+extern void Sampler_task(void *);
+//CRC.c
+extern uint8_t CRC_Builder(uint8_t);
+extern int MSB_Check(uint8_t);
+//State_machine.c
+extern void State_switch(int);
 
 // speaker.c
 #define SAMPLERATE 20
+#define SAMPLE_DELAY 20
 #define FREQHIGH 2800
 #define FREQLOW 2200
 #define START 1

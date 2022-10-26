@@ -200,6 +200,12 @@ void UART_menu (void *argument)
 				UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
+			case '6':
+				Uart_debug_out ^= SAMPLE_DEBUG_OUT;
+				UART_puts("\r\nsample output = ");
+				UART_puts(Uart_debug_out & SAMPLE_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
+
 			case '7':
 				// test case 1
 				break;
