@@ -98,8 +98,14 @@ void Error_Handler(void);
 #define LED_RCK_GPIO_Port GPIOB
 #define BOOT1_Pin GPIO_PIN_2
 #define BOOT1_GPIO_Port GPIOB
+#define Sample_int_Pin GPIO_PIN_7
+#define Sample_int_GPIO_Port GPIOE
+#define Sample_int_EXTI_IRQn EXTI9_5_IRQn
 #define CLK_IN_Pin GPIO_PIN_10
 #define CLK_IN_GPIO_Port GPIOB
+#define Period_int_Pin GPIO_PIN_10
+#define Period_int_GPIO_Port GPIOD
+#define Period_int_EXTI_IRQn EXTI15_10_IRQn
 #define LD4_Pin GPIO_PIN_12
 #define LD4_GPIO_Port GPIOD
 #define LD3_Pin GPIO_PIN_13

@@ -97,7 +97,7 @@ void UART_keys_IRQ (void *argument)
 			finish = TRUE;
 		}
 
-		if (finish)
+		if(finish)
 		{
 			// de volgende taak krijgt een copy van de string
 			// mijn eigen buffer kan zo gelijk weer gevuld worden door de ISR
