@@ -20,6 +20,8 @@ uint8_t first = 0;
 uint8_t reset = 0;
 uint8_t stop = 0;
 
+//uint8_t
+
 unsigned long Previous = 0;
 unsigned long Uptime = 0;
 
@@ -36,14 +38,17 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 //	HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
 	int data =0;
 
+	uint8_t Stime = 1000/SAMPLE_DELAY;
+	uint8_t Upper = 2800/Stime;
+	uint8_t Lower = 2200/Stime;
 	uint32_t Sample = 0;
 
 	Sample = (TIM2->CNT);
 	TIM2->CNT=0;
 
-	if(Sample>50)
+	if(Sample>(Upper-(Upper/10)))
 		data = 1;
-	else if(Sample>40)
+	else if(Sample>(Lower-(Lower/10)))
 		data = 0;
 	else
 	{
@@ -79,7 +84,7 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 	else
 		TCycle++;
 
-	if(stop>50)
+	if(stop>(Upper-(Upper/10)))
 		{
 			stop = 0;
 			first = 0;
@@ -94,6 +99,10 @@ void Period_time(void)
 	unsigned long Current = HAL_GetTick();
 	unsigned long Dif = Current - Previous;
 	Previous = Current;
+
+	uint8_t Stime = 1000/SAMPLE_DELAY;
+	uint8_t Upper = 2800/Stime;
+	uint8_t Lower = 2200/Stime;
 
 	Period = (TIM4->CNT);
 	TIM4->CNT=0;
@@ -119,7 +128,7 @@ void Period_time(void)
 				HAL_GPIO_TogglePin(GPIOD, LEDBLUE);
 			}
 
-			if(Startsign >= 56)
+			if(Startsign >= Upper)
 			{
 				UP++;
 				Startsign = 0;
@@ -161,7 +170,7 @@ void Period_time(void)
 //				flag =1;
 //			}
 
-			if(Startsign >= 44)
+			if(Startsign >= Lower)
 			{
 				TIM2->CNT = 0;
 				//TCycle = 0;
@@ -171,7 +180,7 @@ void Period_time(void)
 //				UART_puts("\r\nSync found Timer reset!");
 				if(first==0)
 				{
-					xTimerStartFromISR(hSample_Timer,xHigherPriorityTaskWoken);
+//					xTimerStartFromISR(hSample_Timer,xHigherPriorityTaskWoken);
 					xTimerResetFromISR(hSample_Timer,xHigherPriorityTaskWoken);
 					first=1;
 				}
