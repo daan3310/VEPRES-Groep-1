@@ -25,8 +25,14 @@ QueueHandle_t 	   	hUART_Queue;
 QueueHandle_t		hChar_Queue;
 QueueHandle_t		hBit_Queue;
 QueueHandle_t		mBit_Queue;
+
 SemaphoreHandle_t  	hLED_Sem;
+SemaphoreHandle_t   hState;
+
 EventGroupHandle_t 	hKEY_Event;
+EventGroupHandle_t  hSample_Event;
+EventGroupHandle_t  hState_Event;
+
 TimerHandle_t      	hTimer1;
 TimerHandle_t		hSample_Timer;
 
@@ -61,6 +67,9 @@ void CreateHandles(void)
 	if (!(hLED_Sem = xSemaphoreCreateMutex()))
 		error_HaltOS("Error hLED_Sem");
 
+	if(!(hState = xSemaphoreCreateMutex()))
+			error_HaltOS("Error hState");
+
 	if (!(hUART_Queue = xQueueCreate(QSIZE_UART, sizeof(unsigned int))))
 		error_HaltOS("Error hUART_Q");
 
@@ -76,9 +85,15 @@ void CreateHandles(void)
 	if (!(hKEY_Event = xEventGroupCreate()))
 		error_HaltOS("Error hLCD_Event");
 
-	if (!(hSample_Timer = xTimerCreate("Sample_timer", pdMS_TO_TICKS(20), pdTRUE, 0, Sample_Handler)))
+	if (!(hSample_Event = xEventGroupCreate()))
+			error_HaltOS("Error hSample_Event");
+
+	if (!(hState_Event = xEventGroupCreate()))
+				error_HaltOS("Error hState_Event");
+
+	if (!(hSample_Timer = xTimerCreate("Sample_timer", pdMS_TO_TICKS(SAMPLE_DELAY), pdTRUE, 0, Sample_Handler)))
 			error_HaltOS("Error hSample_Timer");
-	xTimerStart(hSample_Timer,0);
+//	xTimerStart(hSample_Timer,0);
 
 	UART_puts("\n\rAll handles created successfully.");
 }

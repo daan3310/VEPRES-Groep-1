@@ -129,6 +129,7 @@ int main(void)
   KEYS_initISR(1); // set all lines high once
   LED_init();
   HAL_TIM_Base_Start(&htim2);
+  HAL_TIM_Base_Start(&htim4);
 
   HAL_UART_Receive_IT(&huart2, &byte, 1); //start the UART interrupt engine
   UART_putint(byte); UART_puts("\r\n"); // deze byte is nog een bug.
