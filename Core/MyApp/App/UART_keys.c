@@ -205,7 +205,7 @@ void UART_menu (void *argument)
 				break;
 
 			case '8':
-				// test case 2
+				Sync_Bytes();// test case 2
 				break;
 
 			case '9':

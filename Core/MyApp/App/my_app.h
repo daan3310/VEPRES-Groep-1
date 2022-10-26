@@ -114,12 +114,14 @@ extern void Sample_Handler(TimerHandle_t);
 #define SAMPLERATE 20
 #define FREQHIGH 2800
 #define FREQLOW 2200
+#define START 1
+#define STOP 0
 
 extern void Speaker_Init();
 extern void Change_Frequency(int);
 extern void Toggle_Frequency();
 extern void Sync_Bytes();
-extern void Disable_Speaker();
+extern void Toggle_Speaker();
 
 //data_tx.c
 extern void Prep_data_task();

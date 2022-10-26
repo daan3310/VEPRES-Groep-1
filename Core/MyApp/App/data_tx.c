@@ -73,38 +73,44 @@ void Send_data_task()
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char BitBuf[QSIZE_DATA];
 	int i, length;
-	char SOC[] =	{1, 1, 1, 1,
+	char SOC[] =	{1, 1, 1, 1, 1,
+					1, 1, 1, 1,
+					1, 1, 1, 1,
 					1, 1, 1, 0}; // 0xFE of 254
 
-	char EOT[] = 	{0, 0, 0, 0,
-					 0, 0, 1, 0}; // 0x04 of 4
+	char EOT = 	0x04;
 
 
 	while(TRUE)
 	{
-		// zet die buzzer uit als ie niet nodig is
-		Disable_Speaker();
-
 		// tijdelijke 2 sec delay zodat je meerdere datablokken hoort
 		// uiteindelijk kan deze veel korter
-		osDelay(2000);
+		osDelay(100);
+
+		// skip de task als de Q leeg is
+		if(uxQueueMessagesWaiting(hBit_Queue) == 0)
+			continue;
 
 		// reset iterator
 		i = 0;
 
 		// haal bits uit de Q zolang er bits inzitten EN i minder is dan 64
-		while(xQueueReceive(hBit_Queue, (void *) &BitBuf[i], (TickType_t) 0) && i < QSIZE_DATA)
+		while(xQueueReceive(hBit_Queue, (void *) &BitBuf[i], (TickType_t) 0) && i < QSIZE_DATA-1)
 			i++;
 
 		// lengte opslaan in het geval dat er niet precies 64 bits in de Q zaten
 		length = i;
 
-		// als er bits uit de Q gehaald zijn zet t ledje aan
-		if(length > 0)
-			HAL_GPIO_TogglePin(GPIOD, LEDRED);
+		// ledje aan om transmit te tonen aan user
+		HAL_GPIO_TogglePin(GPIOD, LEDRED);
 
+		// Start de speaker
+		Toggle_Speaker(START);
+
+//		Change_Frequency(FREQHIGH);
+//		osDelay(SAMPLERATE);
 		// SOC sturen
-		for(i = 0; i < sizeof(SOC) && length > 0; i++)
+		for(i = 0; i < sizeof(SOC); i++)
 		{
 			if(SOC[i])
 				Change_Frequency(FREQHIGH);
@@ -114,7 +120,7 @@ void Send_data_task()
 		}
 
 		// verstuur de bits met een snelheid van samplerate
-		for(i = 0; i < length; i++)
+		for(i = 0; i <=length; i++)
 		{
 			if(BitBuf[i])
 				Change_Frequency(FREQHIGH);
@@ -124,25 +130,28 @@ void Send_data_task()
 		}
 
 		// lengte aanvullen met NULL als dat nodig is
-		for(; i < 64 && length > 0; i++)
+		for(; i < 64; i++)
 		{
 			Change_Frequency(FREQLOW);
 			osDelay(SAMPLERATE);
 		}
 
 		// EOT sturen
-		for(i = 0; i < sizeof(EOT) && length > 0; i++)
+		for(i = 7; i >= 0; i--)
 		{
-			if(EOT[i])
+			if(((EOT >> i) & 0x01) == 1)
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
 			osDelay(SAMPLERATE);
 		}
 
+		// Stop de speaker
+		Toggle_Speaker(STOP);
+
 		// zet t ledje weer uit als we klaar zijn
-		if(length > 0)
-			HAL_GPIO_TogglePin(GPIOD, LEDRED);
+		HAL_GPIO_TogglePin(GPIOD, LEDRED);
+		UART_puts("New transmission\n");
 	}
 }
 
@@ -174,7 +183,11 @@ void Char_to_bits(char* BitTarget, char* CharSource, int length)
 		{
 			UART_putint((int) BitTarget[i]);
 			if((1+i)%8==0)
+			{
+				UART_puts(" ");
+				UART_putchar(CharSource[((i+1)/8)-1]);
 				UART_puts("\n");
+			}
 		}
 	}
 }

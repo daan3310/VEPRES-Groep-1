@@ -10,11 +10,17 @@
 
 unsigned int toggle = 0;
 
-void Disable_Speaker()
+/**
+ * @brief zet de speaker aan of uit
+ * @param START = aan, STOP = uit
+ * @return void
+ */
+void Toggle_Speaker(int state)
 {
-	TIM3->ARR = 0;
-	TIM3->CCR3 = 0;
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 0);
+	if(state) //START
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+	else // STOP
+		HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_3);
 }
 
 /**
@@ -24,7 +30,7 @@ void Disable_Speaker()
  */
 void Speaker_Init()
 {
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+//	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 	TIM3->ARR = 1000-1;
 	TIM3->CCR3 = 500-1;
 }
@@ -39,6 +45,19 @@ void Change_Frequency(int frequency)
 	TIM3->ARR 	= 1000000 / frequency - 1;
 	TIM3->CCR3 	= 1000000 / (frequency * 2) - 1;
 	TIM3->CNT = 0;
+
+	if(pdTRUE)
+	{
+		if(frequency == FREQHIGH)
+		{
+			UART_putint(1);
+		}
+		else if(frequency == FREQLOW)
+		{
+			UART_putint(0);
+		}
+		UART_puts("\n");
+	}
 }
 
 /**
@@ -74,15 +93,22 @@ void Toggle_Frequency()
 void Sync_Bytes(int bytes)
 {
 	int i;
+	char SOC[] =	{0, 1, 1, 1,
+					1, 1, 1, 0}; // 0xFE of 254
 
 	UART_puts("\nRunning Syncbytes");
 	toggle = 0; // always start at 0
 
-	for(i = 0; i <= bytes*2; i++)
-	{
-		Toggle_Frequency();
 
-		vTaskDelay(SAMPLERATE);
+	Toggle_Speaker(START);
+	for(i = 0; i < sizeof(SOC); i++)
+	{
+		if(SOC[i])
+			Change_Frequency(FREQHIGH);
+		else
+			Change_Frequency(FREQLOW);
+		osDelay(SAMPLERATE);
 	}
+	Toggle_Speaker(STOP);
 }
 
