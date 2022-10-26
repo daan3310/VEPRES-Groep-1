@@ -15,7 +15,8 @@
 #include "my_app.h"
 
 char *app_name    = "\r\n=== FreeRTOS_methods 1.0 ===\r\n";
-char *app_nameLCD = "VEPRES  Groep 1"; // max 16 chars
+char *app_nameLCD = "VEPRES Groep 1"; // max 16 chars
+char *app_nameLCD2 = "2022-2023";
 
 /// default: debug all output to uart
 int Uart_debug_out = DEBUG_OUT_NONE;
@@ -41,6 +42,8 @@ Michiel Scager (update: july 2022)\r\n";
 
 	LCD_clear();
 	LCD_puts(app_nameLCD);
+	LCD_XY(0,1);
+	LCD_puts(app_nameLCD2);
 
 	UART_puts(app_name);
 	UART_puts(functionality);
@@ -79,6 +82,8 @@ t: transmit any sentence, maximum length is 64\
 p: change Priority of task, eg. 'p,7,20' sets priority of task 7 to 20\r\n\
 d: display Task-data (number, priority, stack usage)\r\n\
 b: change frequency (default 1 kHz), eg. 'b,2500'\r\n\
+l: turns led off\r\n\
+o: turns led on\r\n\
 ===================================================================\r\n";
 
     UART_puts(menu);

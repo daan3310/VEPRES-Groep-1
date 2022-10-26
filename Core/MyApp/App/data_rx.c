@@ -13,19 +13,20 @@
 
 
 /**
-* @brief Oefentask voor studenten
-* @param argument, kan evt vanuit tasks gebruikt worden
+* @ zet de ontvangen bits om in letters om te printen
 * @return void
 */
-void DataRx1 ()
+void DataRx()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char buf[80];
+	char crcBuffer[8];
 	unsigned int i = 0;
 	int k = 0;
-	char eot = 0;
+	char EOT = 0;
 	//int lengte = 40;
-	int letter = 0;
+	int letter = 1
+			;
 	char bitBericht[8];
 	while(TRUE)
 	{
@@ -39,23 +40,30 @@ void DataRx1 ()
 			// Vult 8 bits in een array om te veranderen naar een char
 				k++;
 
-			for (i=0; i < 8 ; i++)
+			if(EOT == 1)
 			{
-				if(bitBericht[i] == 1)
-					letter += (pow(2, (7-i)));
+				for(i=0; i<8 ; i++)
+					crcBuffer[i] = bitBericht[i];
+				EOT = 0;
 			}
-			if(letter == 4)
-				eot = 1;
-			if(letter != 0 && eot == 0)
-				UART_putchar(letter);
-			letter = 0;
-		}
-		//UART_puts("\n");
-		//UART_puts(charBericht);
+			else
+			{
+				for (i=0; i < 8 ; i++)
+				{
+					if(bitBericht[i] == 1)
+						letter += (pow(2, (7-i)));
+				}
+				if(letter == 4)
+					EOT = 1;
 
+				if(letter != 0 && EOT == 0)
+					UART_putchar(letter);
+				letter = 0;
+			}
+		}
 		if (Uart_debug_out & STUDENT_DEBUG_OUT)
 		{
-	       	sprintf(buf, "\r\n%s: %u", __func__, i++);
+	       	sprintf(buf, "\r\n%s: %lu", __func__,uxQueueMessagesWaiting(mBit_Queue));
 			UART_puts(buf);
     	}
 	}

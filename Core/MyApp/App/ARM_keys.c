@@ -165,6 +165,7 @@ void ARM_keys_task (void *argument)
 		}
 		LCD_clear();
 		LCD_put("Transmit");
+		LCD_XY(0,1);
 		LCD_put(stringBuf);
 		xTaskNotifyGive(hTask);	//gives task to tx
 

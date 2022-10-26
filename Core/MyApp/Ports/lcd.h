@@ -28,7 +28,7 @@ Revision:	5
                  15-07-2014 aanpassing voor 1x16 display define eenregel bepaald type display J.F. van der Bent
 */
 
-#define eenregel		// define voor 1x16 display
+//#define eenregel		// define voor 1x16 display
 
 #ifndef LCD_H
 #define LCD_H

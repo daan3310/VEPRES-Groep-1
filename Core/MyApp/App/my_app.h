@@ -106,7 +106,7 @@ extern void UART_menu     (void *);
 // student.c
 extern void Student_task1 (void *);
 // data_rx.c
-extern void DataRx1 ();
+extern void DataRx ();
 // microfoon.c
 extern void Sample_Handler(TimerHandle_t);
 

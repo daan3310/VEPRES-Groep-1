@@ -226,6 +226,7 @@ void UART_menu (void *argument)
 				// print naar lcd
 				LCD_clear();
 				LCD_put("Transmit");
+				LCD_XY(0,1);
 				LCD_put(s);
 
 
@@ -263,6 +264,17 @@ void UART_menu (void *argument)
 				UART_puts("\r\n Frequency set to: ");
 				UART_putint(input);
 				Change_Frequency(input);
+				break;
+
+			case 'L':
+				/// L: zet het display uit
+				LCD_display_off();
+				break;
+
+			case 'O':
+				/// O: zet het display aan
+				LCD_display_on();
+				LCD_cursor_off();
 				break;
 		}
 	}
