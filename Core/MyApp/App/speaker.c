@@ -44,8 +44,7 @@ void Change_Frequency(int frequency)
 {
 	TIM3->ARR 	= 1000000 / frequency - 1;
 	TIM3->CCR3 	= 1000000 / (frequency * 2) - 1;
-<<<<<<< HEAD
-	TIM3->CNT = 0;
+	TIM3->CNT = 0; // set count to 0 to avoid register overflow
 
 	if(pdTRUE)
 	{
@@ -59,9 +58,6 @@ void Change_Frequency(int frequency)
 		}
 		UART_puts("\n");
 	}
-=======
-	TIM3->CNT = 0; // set count to 0 to avoid register overflow
->>>>>>> fc64d129e395f68e0ac44adde912d28532cef1e3
 }
 
 /**

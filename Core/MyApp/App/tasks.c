@@ -68,7 +68,7 @@ TASKDATA tasks[] =
 	// student.c
 //{ Student_task1,NULL, .attr.name = "Student_task1",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
   // DataRx.c
-{ DataRx1,		NULL, .attr.name = "DataRx",	   .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+{ DataRx,		NULL, .attr.name = "DataRx",	   .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
 
 
 	// data_tx.c
