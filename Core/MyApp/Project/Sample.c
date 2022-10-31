@@ -60,7 +60,7 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 
 	buf ^= data << (7-TCycle);
 
-	if((Uart_debug_out & SAMPLE_DEBUG_OUT) )
+	if(0&&(Uart_debug_out & SAMPLE_DEBUG_OUT) )
 	{
 		UART_puts(speak);
 		UART_putint(Sample);
@@ -76,7 +76,8 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 		if((Uart_debug_out & SAMPLE_DEBUG_OUT) && buf!=253)
 		{
 			UART_puts("\nbyte received: ");
-			UART_putint(buf); UART_putchar(buf);
+//			UART_putint(buf);
+			UART_putchar(buf);
 		}
 		TCycle = 0;
 		buf = 0;
@@ -180,15 +181,17 @@ void Period_time(void)
 //				UART_puts("\r\nSync found Timer reset!");
 				if(first==0)
 				{
-//					xTimerStartFromISR(hSample_Timer,xHigherPriorityTaskWoken);
-					xTimerResetFromISR(hSample_Timer,xHigherPriorityTaskWoken);
+					xTimerStartFromISR(hSample_Timer,xHigherPriorityTaskWoken);
+//					xTimerResetFromISR(hSample_Timer,xHigherPriorityTaskWoken);
 					first=1;
+					buf=0;
+//					TCycle=0;
 				}
 				else
 				{
 					xTimerResetFromISR(hSample_Timer,xHigherPriorityTaskWoken);
-					reset = 1;
-					TCycle = -1;
+//					reset = 1;
+					TCycle = 0;
 					buf=0;
 				}
 

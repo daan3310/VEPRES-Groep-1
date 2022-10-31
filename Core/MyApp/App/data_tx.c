@@ -151,7 +151,7 @@ void Send_data_task()
 
 		// zet t ledje weer uit als we klaar zijn
 		HAL_GPIO_TogglePin(GPIOD, LEDRED);
-		UART_puts("New transmission\n");
+		UART_puts("\nNew transmission");
 	}
 }
 
