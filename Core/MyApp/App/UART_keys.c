@@ -218,6 +218,13 @@ void UART_menu (void *argument)
 				Toggle_Frequency();
 				break;
 
+			case 'S':
+				input = atoi(s+2); // skip first 2 characters
+				UART_puts("\r\n Speed changed to: ");
+				UART_putint(input); UART_puts(" ms");
+				Speed_calc(input);
+				break;
+
 			case 'M':
 				DisplayMenu(); /// M: Displays het menu (zie my_app.c)
 				break;

@@ -8,6 +8,7 @@
 #include "cmsis_os.h"
 #include "my_app.h"
 
+extern unsigned int Samplerate;
 
 /**
  * @brief receives data from the CharQ, sent by UART keys.
@@ -116,7 +117,7 @@ void Send_data_task()
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
-			osDelay(SAMPLERATE);
+			osDelay(Samplerate);
 		}
 
 		// verstuur de bits met een snelheid van samplerate
@@ -126,14 +127,14 @@ void Send_data_task()
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
-			osDelay(SAMPLERATE);
+			osDelay(Samplerate);
 		}
 
 		// lengte aanvullen met NULL als dat nodig is
 		for(; i < 64; i++)
 		{
 			Change_Frequency(FREQLOW);
-			osDelay(SAMPLERATE);
+			osDelay(Samplerate);
 		}
 
 		// EOT sturen
@@ -143,7 +144,7 @@ void Send_data_task()
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
-			osDelay(SAMPLERATE);
+			osDelay(Samplerate);
 		}
 
 		// Stop de speaker
