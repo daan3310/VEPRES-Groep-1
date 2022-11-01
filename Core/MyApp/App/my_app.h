@@ -117,10 +117,12 @@ extern void UART_menu     (void *);
 extern void Student_task1 (void *);
 // data_rx.c
 extern void DataRx ();
-// microfoon.c
+// Sample.c
 extern void Sample_Handler(TimerHandle_t);
+extern void Msg_check(uint8_t);
 extern void Period_time(void);
 extern void Speed_calc(int);
+extern void Speed_init(int);
 //ExTim.c
 extern void Sampler_task(void *);
 //CRC.c

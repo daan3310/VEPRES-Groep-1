@@ -25,8 +25,7 @@ void DataRx()
 	int k = 0;
 	char EOT = 0;
 	//int lengte = 40;
-	int letter = 1
-			;
+	unsigned short letter = 1;
 	char bitBericht[8];
 	while(TRUE)
 	{
@@ -53,7 +52,7 @@ void DataRx()
 					if(bitBericht[i] == 1)
 						letter += (pow(2, (7-i)));
 				}
-				LED_put((int) letter);
+				LED_put(letter);
 				if(letter == 4)
 					EOT = 1;
 

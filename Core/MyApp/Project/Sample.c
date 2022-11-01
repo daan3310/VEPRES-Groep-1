@@ -25,6 +25,7 @@ uint8_t first = 0;
 uint8_t reset = 0;
 uint8_t stop = 0;
 
+uint8_t rec = 0;
 //uint8_t
 
 unsigned long Previous = 0;
@@ -77,12 +78,13 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 
 	if(TCycle >6)
 	{
-		xEventGroupSetBits(hSample_Event, buf);
+//		xEventGroupSetBits(hSample_Event, buf);
 		if(buf!=253)
 		{
 			UART_puts("\nbyte received: ");
 //			UART_putint(buf);
 			UART_putchar(buf);
+			Msg_check(buf);
 		}
 		TCycle = 0;
 		buf = 0;
@@ -97,6 +99,28 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 			TCycle = 0;
 			xTimerStop(hSample_Timer,portMAX_DELAY);
 		}
+}
+
+void Msg_check(uint8_t byte)
+{
+	switch(byte)
+	{
+	case 0x02:	//SOT
+		UART_puts("Start of text");
+		rec =1;
+		break;
+	case 0x03:	//ETX
+		rec =0;
+		break;
+	case 0x04:	//EOT
+		xTimerStop(hSample_Timer,portMAX_DELAY);
+		rec =0;
+		break;
+	default:
+		if(rec==1)
+			xQueueSend(mBit_Queue,byte,portMAX_DELAY);
+		break;
+	}
 }
 
 void Period_time(void)
@@ -167,11 +191,6 @@ void Period_time(void)
 				flag = 0;
 			}
 
-//			if(Startsign>30)
-//			{
-//				flag =1;
-//			}
-
 			if(Startsign >= Lower)
 			{
 				TIM2->CNT = 0;
@@ -186,12 +205,10 @@ void Period_time(void)
 //					xTimerResetFromISR(hSample_Timer,xHigherPriorityTaskWoken);
 					first=1;
 					buf=0;
-//					TCycle=0;
 				}
 				else
 				{
 					xTimerResetFromISR(hSample_Timer,xHigherPriorityTaskWoken);
-//					reset = 1;
 					TCycle = 0;
 					buf=0;
 				}
@@ -201,10 +218,15 @@ void Period_time(void)
 			}
 
 			break;
-
-
 	}
+}
 
+void Speed_init(int speed)
+{
+	Stime = 1000/speed;
+	Upper = 2800/Stime;
+	Lower = 2200/Stime;
+	Samplerate = speed;
 }
 
 void Speed_calc(int speed)
@@ -213,5 +235,6 @@ void Speed_calc(int speed)
 	 Upper = 2800/Stime;
 	 Lower = 2200/Stime;
 	 Samplerate = speed;
+	 xTimerChangePeriod(hSample_Timer,speed,portMAX_DELAY);
 }
 
