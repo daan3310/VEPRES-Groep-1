@@ -53,6 +53,7 @@ void DataRx()
 					if(bitBericht[i] == 1)
 						letter += (pow(2, (7-i)));
 				}
+				LED_put((int) letter);
 				if(letter == 4)
 					EOT = 1;
 
