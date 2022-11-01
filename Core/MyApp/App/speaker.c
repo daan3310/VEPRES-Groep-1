@@ -9,6 +9,7 @@
 #include "my_app.h"
 
 unsigned int toggle = 0;
+extern unsigned int Samplerate;
 
 /**
  * @brief zet de speaker aan of uit
@@ -105,7 +106,7 @@ void Sync_Bytes(int bytes)
 			Change_Frequency(FREQHIGH);
 		else
 			Change_Frequency(FREQLOW);
-		osDelay(SAMPLERATE);
+		osDelay(Samplerate);
 	}
 	Toggle_Speaker(STOP);
 }

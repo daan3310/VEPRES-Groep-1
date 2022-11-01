@@ -10,11 +10,16 @@
 //#include "usb_host.h"
 #include "my_app.h"
 
-int TCycle = 0;
+#define SPACING 5
+
 uint8_t Startsign = 0;
 uint16_t Period = 0;
 uint8_t UP = 0;
 uint8_t buf = 0;
+
+uint8_t Stime;
+uint8_t Upper;
+uint8_t Lower;
 
 uint8_t first = 0;
 uint8_t reset = 0;
@@ -25,7 +30,10 @@ uint8_t stop = 0;
 unsigned long Previous = 0;
 unsigned long Uptime = 0;
 
+unsigned int Samplerate = 20;
+
 int flag = 0; // test case Tom
+int TCycle = 0;
 
 static char *speak = "\nI counted: ";
 
@@ -38,17 +46,14 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 //	HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
 	int data =0;
 
-	uint8_t Stime = 1000/SAMPLE_DELAY;
-	uint8_t Upper = 2800/Stime;
-	uint8_t Lower = 2200/Stime;
 	uint32_t Sample = 0;
 
 	Sample = (TIM2->CNT);
 	TIM2->CNT=0;
 
-	if(Sample>(Upper-(Upper/10)))
+	if(Sample>(Upper-(Upper/SPACING)))
 		data = 1;
-	else if(Sample>(Lower-(Lower/10)))
+	else if(Sample>(Lower-(Lower/SPACING)))
 		data = 0;
 	else
 	{
@@ -60,7 +65,7 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 
 	buf ^= data << (7-TCycle);
 
-	if(0&&(Uart_debug_out & SAMPLE_DEBUG_OUT) )
+	if((Uart_debug_out & SAMPLE_DEBUG_OUT) )
 	{
 		UART_puts(speak);
 		UART_putint(Sample);
@@ -73,7 +78,7 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 	if(TCycle >6)
 	{
 		xEventGroupSetBits(hSample_Event, buf);
-		if((Uart_debug_out & SAMPLE_DEBUG_OUT) && buf!=253)
+		if(buf!=253)
 		{
 			UART_puts("\nbyte received: ");
 //			UART_putint(buf);
@@ -85,7 +90,7 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 	else
 		TCycle++;
 
-	if(stop>(Upper-(Upper/10)))
+	if(stop>(Upper-(Upper/SPACING)))
 		{
 			stop = 0;
 			first = 0;
@@ -100,10 +105,6 @@ void Period_time(void)
 	unsigned long Current = HAL_GetTick();
 	unsigned long Dif = Current - Previous;
 	Previous = Current;
-
-	uint8_t Stime = 1000/SAMPLE_DELAY;
-	uint8_t Upper = 2800/Stime;
-	uint8_t Lower = 2200/Stime;
 
 	Period = (TIM4->CNT);
 	TIM4->CNT=0;
@@ -206,4 +207,11 @@ void Period_time(void)
 
 }
 
+void Speed_calc(int speed)
+{
+	 Stime = 1000/speed;
+	 Upper = 2800/Stime;
+	 Lower = 2200/Stime;
+	 Samplerate = speed;
+}
 

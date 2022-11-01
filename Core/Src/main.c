@@ -140,6 +140,8 @@ int main(void)
   // Initialising speaker output
   Speaker_Init();
 
+  // Calculate sending speed
+  Speed_calc(SAMPLE_DELAY);
   /* USER CODE END 2 */
 
   /* Init scheduler */

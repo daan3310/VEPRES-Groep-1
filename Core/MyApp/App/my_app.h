@@ -120,6 +120,7 @@ extern void DataRx ();
 // microfoon.c
 extern void Sample_Handler(TimerHandle_t);
 extern void Period_time(void);
+extern void Speed_calc(int);
 //ExTim.c
 extern void Sampler_task(void *);
 //CRC.c
@@ -129,7 +130,6 @@ extern int MSB_Check(uint8_t);
 extern void State_switch(int);
 
 // speaker.c
-#define SAMPLERATE 20
 #define SAMPLE_DELAY 20
 #define FREQHIGH 2800
 #define FREQLOW 2200
