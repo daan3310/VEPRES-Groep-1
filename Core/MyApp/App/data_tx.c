@@ -79,6 +79,8 @@ void Send_data_task()
 					1, 1, 1, 1,
 					1, 1, 1, 0}; // 0xFE of 254
 
+	int amountWaiting = 0;
+	char ETX = 	0x03;
 	char EOT = 	0x04;
 
 
@@ -88,8 +90,11 @@ void Send_data_task()
 		// uiteindelijk kan deze veel korter
 		osDelay(100);
 
+		// opslaan of er nog data in de Q zit
+		amountWaiting = uxQueueMessagesWaiting(hBit_Queue);
+
 		// skip de task als de Q leeg is
-		if(uxQueueMessagesWaiting(hBit_Queue) == 0)
+		if(amountWaiting == 0)
 			continue;
 
 		// reset iterator
@@ -130,6 +135,9 @@ void Send_data_task()
 			osDelay(Samplerate);
 		}
 
+		// check opnieuw of de Q leeg is
+		amountWaiting = uxQueueMessagesWaiting(hBit_Queue);
+
 		// lengte aanvullen met NULL als dat nodig is
 		for(; i < 64; i++)
 		{
@@ -137,8 +145,19 @@ void Send_data_task()
 			osDelay(Samplerate);
 		}
 
-		// EOT sturen
-		for(i = 7; i >= 0; i--)
+		// ETX sturen als er nog berichten in de Q zitten
+		for(i = 7; i >= 0 && amountWaiting != 0; i--)
+		{
+			if(((ETX >> i) & 0x01) == 1)
+				Change_Frequency(FREQHIGH);
+			else
+				Change_Frequency(FREQLOW);
+			osDelay(Samplerate);
+		}
+
+
+		// EOT sturen als de Q leeg is
+		for(i = 7; i >= 0 && amountWaiting == 0; i--)
 		{
 			if(((EOT >> i) & 0x01) == 1)
 				Change_Frequency(FREQHIGH);

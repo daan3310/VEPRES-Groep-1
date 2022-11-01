@@ -47,7 +47,7 @@ void Change_Frequency(int frequency)
 	TIM3->CCR3 	= 1000000 / (frequency * 2) - 1;
 	TIM3->CNT = 0; // set count to 0 to avoid register overflow
 
-	if(pdFALSE)
+	if(pdTRUE)
 	{
 		if(frequency == FREQHIGH)
 		{
