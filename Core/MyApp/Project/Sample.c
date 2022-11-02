@@ -103,7 +103,7 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 
 void Msg_check(uint8_t byte)
 {
-	osThreadId_t tijdelijk = xTaskGetHandle("DataRx");
+	osThreadId_t tijdelijk = xTaskGetHandle("Data_rx_task");
 	switch(byte)
 	{
 	case 0x02:	//SOT

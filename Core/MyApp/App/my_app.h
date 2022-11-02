@@ -116,7 +116,7 @@ extern void UART_menu     (void *);
 // student.c
 extern void Student_task1 (void *);
 // data_rx.c
-extern void DataRx ();
+extern void Data_rx_task ();
 // Sample.c
 extern void Sample_Handler(TimerHandle_t);
 extern void Msg_check(uint8_t);
