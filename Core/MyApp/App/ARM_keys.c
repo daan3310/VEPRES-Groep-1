@@ -78,7 +78,7 @@ void ARM_keys_task (void *argument)
     	                 &key, 				// Notified value.
     	                 portMAX_DELAY);  	// Block indefinitely.
 
-    	LED_put((unsigned char)key); // set 8 leds-byte to key-value
+//    	LED_put((unsigned char)key); // set 8 leds-byte to key-value
 		osDelay(500);
 
 
