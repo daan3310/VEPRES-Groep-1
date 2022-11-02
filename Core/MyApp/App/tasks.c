@@ -55,28 +55,28 @@ typedef struct TaskData
  */
 TASKDATA tasks[] =
 {
-// function      arg   name                        stacksize (* 4 = 32bit)     priority
+// function      arg   name                        		stacksize (* 4 = 32bit)     priority
 // ----------------------------------------------------------------------------------------------------------------------------
 	// in ARM_keys.c
-{ ARM_keys_IRQ, NULL, .attr.name = "ARM_keys_IRQ", .attr.stack_size = 128 * 6, .attr.priority = osPriorityNormal1 },
-{ ARM_keys_task,NULL, .attr.name = "ARM_keys_task",.attr.stack_size = 128 * 6, .attr.priority = osPriorityNormal2 },
+{ ARM_keys_IRQ, NULL, .attr.name = "ARM_keys_IRQ", 		.attr.stack_size = 128 * 6, .attr.priority = osPriorityNormal1 },
+{ ARM_keys_task,NULL, .attr.name = "ARM_keys_task",		.attr.stack_size = 128 * 6, .attr.priority = osPriorityNormal2 },
 
 	// UART_keys.c
-{ UART_keys_IRQ,NULL, .attr.name = "UART_keys_IRQ",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal5 },
-{ UART_menu,    NULL, .attr.name = "UART_menu",    .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal6 },
+{ UART_keys_IRQ,NULL, .attr.name = "UART_keys_IRQ",		.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal5 },
+{ UART_menu,    NULL, .attr.name = "UART_menu",    		.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal6 },
 
 	// student.c
 //{ Student_task1,NULL, .attr.name = "Student_task1",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
   // DataRx.c
-{ DataRx,		NULL, .attr.name = "DataRx",	   .attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+{ Data_rx_task,	NULL, .attr.name = "Data_rx_task",	   .attr.stack_size = 128 * 6, 	.attr.priority = osPriorityRealtime7 },
 
 
 	// data_tx.c
-{ Prep_data_task,NULL, .attr.name = "Prep_data_task",.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
-{ Send_data_task,NULL, .attr.name = "Send_data_task",.attr.stack_size = 128 * 6, .attr.priority = osPriorityRealtime7 },
+{ Prep_data_task,NULL, .attr.name = "Prep_data_task",	.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+{ Send_data_task,NULL, .attr.name = "Send_data_task",	.attr.stack_size = 128 * 6, .attr.priority = osPriorityRealtime7 },
 
   // deze laatste niet wissen, wordt gebruik als 'terminator' in loops
-{ NULL,         NULL, .attr.name = NULL,         .  attr.stack_size = 0,       .attr.priority = 0 }
+{ NULL,          NULL, .attr.name = NULL,         		.attr.stack_size = 0,       .attr.priority = 0 }
 };
 
 

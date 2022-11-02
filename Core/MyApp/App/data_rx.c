@@ -16,23 +16,35 @@
 * @ zet de ontvangen bits om in letters om te printen
 * @return void
 */
-void DataRx()
+void Data_rx_task()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
-	//char buf[80];
+
+	while(TRUE)
+	{
+		osDelay(500); //Tom: Ik weet niet waarom maar deze moet relatief hoog zijn
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+		UART_puts("\nData_rx_task unblocked");
+		// stick code here
+
+
+	}
+}
+
+/* succes hiermee, lol
+ *
+ * 	//char buf[80];
 //	char crcBuffer[8];
 	//unsigned int i = 0;
 	char letter;
 	//char EOT = 0;
 	//int lengte = 40;
 	uint8_t byteBericht[65];
-	while(TRUE)
-	{
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+ *
+ * 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 		UART_puts("DataRX unblocked");
 
-//		if(uxQueueMessagesWaiting(mBit_Queue) == 0)
-//			continue;
+//
 		//lengte = uxQueueMessagesWaiting(mBit_Queue)/8;
 //		if((uxQueueMessagesWaiting(mBit_Queue) != 0))
 //		// kijkt of er een even aantal bits in de queue zit en er iets in de queue zit
@@ -77,7 +89,4 @@ void DataRx()
 //	       	sprintf(buf, "\r\n%s: %lu", __func__,uxQueueMessagesWaiting(mBit_Queue));
 //			UART_puts(buf);
     	}
-	}
-}
-
-
+ */

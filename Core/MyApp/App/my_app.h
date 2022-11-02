@@ -51,6 +51,8 @@ extern EventGroupHandle_t 	hKEY_Event;
 extern EventGroupHandle_t hSample_Event;
 /// handle voor State event (currently unused)
 extern EventGroupHandle_t hState_Event;
+// Speciale handler als optimisation in Sample.c
+extern osThreadId_t  hData_name;
 
 /// handle voor speaker timer
 extern TIM_HandleTypeDef 	htim3;
@@ -103,6 +105,7 @@ extern void         SetTaskPriority (int, int);
 
 // handles.c
 extern void         CreateHandles   (void);
+extern void 		GetName(void);
 
 // ARM_keys.c
 extern void ARM_keys_IRQ (void *);
@@ -116,7 +119,7 @@ extern void UART_menu     (void *);
 // student.c
 extern void Student_task1 (void *);
 // data_rx.c
-extern void DataRx ();
+extern void Data_rx_task ();
 // Sample.c
 extern void Sample_Handler(TimerHandle_t);
 extern void Msg_check(uint8_t);
