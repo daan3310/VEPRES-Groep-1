@@ -93,12 +93,12 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 		TCycle++;
 
 	if(stop>(Upper-(Upper/SPACING)))
-		{
-			stop = 0;
-			first = 0;
-			TCycle = 0;
-			xTimerStop(hSample_Timer,portMAX_DELAY);
-		}
+	{
+		stop = 0;
+		first = 0;
+		TCycle = 0;
+		xTimerStop(hSample_Timer,portMAX_DELAY);
+	}
 }
 
 void Msg_check(uint8_t byte)
