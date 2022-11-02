@@ -19,32 +19,27 @@
 void DataRx()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
-	char buf[80];
+	//char buf[80];
 //	char crcBuffer[8];
-	unsigned int i = 0;
-	char EOT = 0;
+	//unsigned int i = 0;
+	char letter;
+	//char EOT = 0;
 	//int lengte = 40;
 	uint8_t byteBericht[65];
 	while(TRUE)
 	{
-		osDelay(100);
-
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+		UART_puts("DataRX unblocked");
 
-		if(uxQueueMessagesWaiting(mBit_Queue) == 0)
-			continue;
+//		if(uxQueueMessagesWaiting(mBit_Queue) == 0)
+//			continue;
 		//lengte = uxQueueMessagesWaiting(mBit_Queue)/8;
-		if((uxQueueMessagesWaiting(mBit_Queue) != 0))
-		// kijkt of er een even aantal bits in de queue zit en er iets in de queue zit
-		{
+//		if((uxQueueMessagesWaiting(mBit_Queue) != 0))
+//		// kijkt of er een even aantal bits in de queue zit en er iets in de queue zit
+//		{
+//			while(xQueueReceive(mBit_Queue, (void *) &letter, (TickType_t) 0))
+//					UART_putchar(letter);
 
-			memset(byteBericht, '\0', 65);
-			for(i=0;i<8;i++)
-			{
-				xQueueReceive(mBit_Queue, &byteBericht[i],  (TickType_t) 0);
-			}
-			UART_puts("\n");
-			UART_puts((char *)byteBericht);
 
 
 //			k = 0;
@@ -76,7 +71,7 @@ void DataRx()
 //
 //				letter = 0;
 //			}
-		}
+//		}
 		if (Uart_debug_out & STUDENT_DEBUG_OUT)
 		{
 //	       	sprintf(buf, "\r\n%s: %lu", __func__,uxQueueMessagesWaiting(mBit_Queue));

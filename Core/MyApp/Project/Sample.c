@@ -103,7 +103,7 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 
 void Msg_check(uint8_t byte)
 {
-	osThreadId_t hTask = xTaskGetHandle("DataRx");
+	osThreadId_t tijdelijk = xTaskGetHandle("DataRx");
 	switch(byte)
 	{
 	case 0x02:	//SOT
@@ -116,9 +116,9 @@ void Msg_check(uint8_t byte)
 		break;
 	case 0x04:	//EOT
 		UART_puts(" End of transmission");
-		xTaskNotifyGive(hTask);
 		xTimerStop(hSample_Timer,portMAX_DELAY);
 		rec =0;
+		xTaskNotifyGive(tijdelijk);
 		break;
 	default:
 		if(rec==1)
