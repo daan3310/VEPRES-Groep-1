@@ -10,7 +10,7 @@
 //#include "usb_host.h"
 #include "my_app.h"
 
-#define SPACING 5
+#define SPACING 7
 
 uint8_t Startsign = 0;
 uint16_t Period = 0;
@@ -103,22 +103,26 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 
 void Msg_check(uint8_t byte)
 {
+	osThreadId_t hTask = xTaskGetHandle("DataRx");
 	switch(byte)
 	{
 	case 0x02:	//SOT
-		UART_puts("Start of text");
+		UART_puts(" Start of text");
 		rec =1;
 		break;
 	case 0x03:	//ETX
+		UART_puts(" End of text");
 		rec =0;
 		break;
 	case 0x04:	//EOT
+		UART_puts(" End of transmission");
+		xTaskNotifyGive(hTask);
 		xTimerStop(hSample_Timer,portMAX_DELAY);
 		rec =0;
 		break;
 	default:
 		if(rec==1)
-			xQueueSend(mBit_Queue,byte,portMAX_DELAY);
+			xQueueSend(mBit_Queue,&byte,portMAX_DELAY);
 		break;
 	}
 }

@@ -20,51 +20,67 @@ void DataRx()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char buf[80];
-	char crcBuffer[8];
+//	char crcBuffer[8];
 	unsigned int i = 0;
-	int k = 0;
 	char EOT = 0;
 	//int lengte = 40;
-	unsigned short letter = 1;
-	char bitBericht[8];
+	uint8_t byteBericht[65];
 	while(TRUE)
 	{
-		osDelay(1000);
+		osDelay(100);
+
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+		if(uxQueueMessagesWaiting(mBit_Queue) == 0)
+			continue;
 		//lengte = uxQueueMessagesWaiting(mBit_Queue)/8;
-		if(uxQueueMessagesWaiting(mBit_Queue)%8 == 0 && uxQueueMessagesWaiting(mBit_Queue) != 0)
+		if((uxQueueMessagesWaiting(mBit_Queue) != 0))
 		// kijkt of er een even aantal bits in de queue zit en er iets in de queue zit
 		{
-			k = 0;
-			while(xQueueReceive(mBit_Queue, (void *) &bitBericht[k], (TickType_t) 0) && k < 7)
-			// Vult 8 bits in een array om te veranderen naar een char
-				k++;
 
-			if(EOT == 1)
+			memset(byteBericht, '\0', 65);
+			for(i=0;i<8;i++)
 			{
-				for(i=0; i<8 ; i++)
-					crcBuffer[i] = bitBericht[i];
-				EOT = 0;
+				xQueueReceive(mBit_Queue, &byteBericht[i],  (TickType_t) 0);
 			}
-			else
-			{
-				for (i=0; i < 8 ; i++)
-				{
-					if(bitBericht[i] == 1)
-						letter += (pow(2, (7-i)));
-				}
-				LED_put(letter);
-				if(letter == 4)
-					EOT = 1;
+			UART_puts("\n");
+			UART_puts((char *)byteBericht);
 
-				if(letter != 0 && EOT == 0)
-					UART_putchar(letter);
-				letter = 0;
-			}
+
+//			k = 0;
+//			while(xQueueReceive(mBit_Queue, (void *) &bitBericht[k], (TickType_t) 0) && k < 7)
+//			// Vult 8 bits in een array om te veranderen naar een char
+//				k++;
+//
+////			if(EOT == 1)
+////			{
+////				for(i=0; i<8 ; i++)
+////					crcBuffer[i] = bitBericht[i];
+////				EOT = 0;
+////			}
+////			else
+////			{
+//				for (i=0; i < 8 ; i++)
+//				{
+//					if(bitBericht[i] == 1)
+//						letter += (pow(2, (7-i)));
+//				}
+//
+//				LED_put(letter);
+//
+//				if(letter == 4)
+//					EOT = 1;
+//
+//				if(letter != 0 && EOT == 0)
+//					UART_putchar(letter);
+//
+//				letter = 0;
+//			}
 		}
 		if (Uart_debug_out & STUDENT_DEBUG_OUT)
 		{
-	       	sprintf(buf, "\r\n%s: %lu", __func__,uxQueueMessagesWaiting(mBit_Queue));
-			UART_puts(buf);
+//	       	sprintf(buf, "\r\n%s: %lu", __func__,uxQueueMessagesWaiting(mBit_Queue));
+//			UART_puts(buf);
     	}
 	}
 }

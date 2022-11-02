@@ -195,19 +195,15 @@ void UART_menu (void *argument)
 				break;
 
 			case '5':
-				Uart_debug_out ^= RES1_DEBUG_OUT; // toggle output on/off
-				UART_puts("\r\nreserved1 output = ");
-				UART_puts(Uart_debug_out & RES1_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				Uart_debug_out ^= SEND_DEBUG_OUT;
+				UART_puts("\r\nsend output = ");
+				UART_puts(Uart_debug_out & SEND_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
 			case '6':
 				Uart_debug_out ^= SAMPLE_DEBUG_OUT;
 				UART_puts("\r\nsample output = ");
 				UART_puts(Uart_debug_out & SAMPLE_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
-				break;
-
-			case '7':
-				// test case 1
 				break;
 
 			case '8':
