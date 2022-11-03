@@ -19,74 +19,20 @@
 void Data_rx_task()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
-
+	char letter;
 	while(TRUE)
 	{
 		osDelay(500); //Tom: Ik weet niet waarom maar deze moet relatief hoog zijn
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-		UART_puts("\nData_rx_task unblocked");
-		// stick code here
-
+		while(xQueueReceive(mBit_Queue, (void *) &letter, (TickType_t) 0))
+			if(letter != 0)
+				UART_putchar(letter);
 
 	}
 }
 
-/* succes hiermee, lol
- *
- * 	//char buf[80];
-//	char crcBuffer[8];
-	//unsigned int i = 0;
-	char letter;
-	//char EOT = 0;
-	//int lengte = 40;
-	uint8_t byteBericht[65];
- *
- * 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-		UART_puts("DataRX unblocked");
-
-//
-		//lengte = uxQueueMessagesWaiting(mBit_Queue)/8;
-//		if((uxQueueMessagesWaiting(mBit_Queue) != 0))
-//		// kijkt of er een even aantal bits in de queue zit en er iets in de queue zit
+//		if (Uart_debug_out & STUDENT_DEBUG_OUT)
 //		{
-//			while(xQueueReceive(mBit_Queue, (void *) &letter, (TickType_t) 0))
-//					UART_putchar(letter);
-
-
-
-//			k = 0;
-//			while(xQueueReceive(mBit_Queue, (void *) &bitBericht[k], (TickType_t) 0) && k < 7)
-//			// Vult 8 bits in een array om te veranderen naar een char
-//				k++;
-//
-////			if(EOT == 1)
-////			{
-////				for(i=0; i<8 ; i++)
-////					crcBuffer[i] = bitBericht[i];
-////				EOT = 0;
-////			}
-////			else
-////			{
-//				for (i=0; i < 8 ; i++)
-//				{
-//					if(bitBericht[i] == 1)
-//						letter += (pow(2, (7-i)));
-//				}
-//
-//				LED_put(letter);
-//
-//				if(letter == 4)
-//					EOT = 1;
-//
-//				if(letter != 0 && EOT == 0)
-//					UART_putchar(letter);
-//
-//				letter = 0;
-//			}
-//		}
-		if (Uart_debug_out & STUDENT_DEBUG_OUT)
-		{
 //	       	sprintf(buf, "\r\n%s: %lu", __func__,uxQueueMessagesWaiting(mBit_Queue));
 //			UART_puts(buf);
-    	}
- */
+//    	}

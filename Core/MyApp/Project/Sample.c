@@ -114,7 +114,7 @@ void Msg_check(uint8_t byte)
 		rec =0;
 		break;
 	case 0x04:	//EOT
-		UART_puts(" End of transmission");
+		UART_puts(" End of transmission\n");
 		xTimerStop(hSample_Timer,portMAX_DELAY);
 		rec =0;
 		xTaskNotifyGive(hData_name);
