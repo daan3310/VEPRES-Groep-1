@@ -717,6 +717,7 @@ void StartDefaultTask(void *argument)
 
   CreateHandles();
   CreateTasks();
+  GetName();
 
   /* Infinite loop */
   for(;;)

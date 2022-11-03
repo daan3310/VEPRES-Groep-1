@@ -36,6 +36,8 @@ EventGroupHandle_t  hState_Event;
 TimerHandle_t      	hTimer1;
 TimerHandle_t		hSample_Timer;
 
+osThreadId_t  		hData_name;
+
 
 /**
 * @brief Fatale OS-error opgetreden tijdens startup of runtime, doorgaan is
@@ -77,25 +79,36 @@ void CreateHandles(void)
 		error_HaltOS("Error hChar_Queue");
 
 	if(!(hBit_Queue = xQueueCreate(QSIZE_DATA*8, sizeof(char))))
-			error_HaltOS("Error hBit_Queue");
+		error_HaltOS("Error hBit_Queue");
 
 	if(!(mBit_Queue = xQueueCreate(QSIZE_DATA*8, sizeof(char))))
-			error_HaltOS("Error mBit_Queue");
+		error_HaltOS("Error mBit_Queue");
 
 	if (!(hKEY_Event = xEventGroupCreate()))
 		error_HaltOS("Error hLCD_Event");
 
 	if (!(hSample_Event = xEventGroupCreate()))
-			error_HaltOS("Error hSample_Event");
+		error_HaltOS("Error hSample_Event");
 
 	if (!(hState_Event = xEventGroupCreate()))
-				error_HaltOS("Error hState_Event");
+		error_HaltOS("Error hState_Event");
 
 	if (!(hSample_Timer = xTimerCreate("Sample_timer", pdMS_TO_TICKS(SAMPLE_DELAY), pdTRUE, 0, Sample_Handler)))
-			error_HaltOS("Error hSample_Timer");
+		error_HaltOS("Error hSample_Timer");
 //	xTimerStart(hSample_Timer,0);
 
 	UART_puts("\n\rAll handles created successfully.");
 }
 
+
+/**
+* @brief Creates handle names voor deze applicatie die specifiek na task creation
+* 			moet worden gerunned
+* @return void
+*/
+void GetName()
+{
+	if (!(hData_name = xTaskGetHandle("Data_rx_task")))
+			error_HaltOS("Error hData_name");
+}
 

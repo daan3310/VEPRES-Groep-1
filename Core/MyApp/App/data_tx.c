@@ -181,7 +181,7 @@ void Send_data_task()
 
 		// zet t ledje weer uit als we klaar zijn
 		HAL_GPIO_TogglePin(GPIOD, LEDRED);
-		UART_puts("\nNew transmission");
+//		UART_puts("\nNew transmission");
 	}
 }
 
@@ -206,7 +206,7 @@ void Char_to_bits(char* BitTarget, char* CharSource, int length)
 		k = 0;
 	}
 
-	if(pdTRUE) // debug
+	if(pdFALSE) // debug
 	{
 		UART_puts("\n");
 		for(i = 0; i < length*8; i++)
