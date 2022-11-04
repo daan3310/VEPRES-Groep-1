@@ -83,7 +83,7 @@ void Send_data_task()
 	char SOT = 	0x02;
 	char ETX = 	0x03;
 	char EOT = 	0x04;
-
+	char CrC;
 
 	while(TRUE)
 	{
@@ -155,26 +155,48 @@ void Send_data_task()
 			osDelay(Samplerate);
 		}
 
-		// ETX sturen als er nog berichten in de Q zitten
-		for(i = 7; i >= 0 && amountWaiting != 0; i--)
+		if(amountWaiting != 0)
 		{
-			if(((ETX >> i) & 0x01) == 1)
-				Change_Frequency(FREQHIGH);
-			else
-				Change_Frequency(FREQLOW);
-			osDelay(Samplerate);
+			// ETX sturen als er nog berichten in de Q zitten
+			for(i = 7; i >= 0; i--)
+			{
+				if(((ETX >> i) & 0x01) == 1)
+					Change_Frequency(FREQHIGH);
+				else
+					Change_Frequency(FREQLOW);
+				osDelay(Samplerate);
+			}
+
 		}
 
-
+		if(amountWaiting ==0)
+		{
 		// EOT sturen als de Q leeg is
-		for(i = 7; i >= 0 && amountWaiting == 0; i--)
+			for(i = 7; i >= 0; i--)
+			{
+				if(((EOT >> i) & 0x01) == 1)
+					Change_Frequency(FREQHIGH);
+				else
+					Change_Frequency(FREQLOW);
+				osDelay(Samplerate);
+			}
+		}
+
+		// Bouw CRC
+		CrC = CRC_Builder(BitBuf);
+		for(i = 7; i >= 0; i--)
 		{
-			if(((EOT >> i) & 0x01) == 1)
+			if(((CrC >> i) & 0x01) == 1)
 				Change_Frequency(FREQHIGH);
 			else
 				Change_Frequency(FREQLOW);
 			osDelay(Samplerate);
 		}
+
+
+
+		// CRC sturen
+
 
 		// Stop de speaker
 		Toggle_Speaker(STOP);

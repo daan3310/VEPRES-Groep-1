@@ -129,7 +129,7 @@ extern void Speed_init(int);
 //ExTim.c
 extern void Sampler_task(void *);
 //CRC.c
-extern uint8_t CRC_Builder(uint8_t);
+extern uint8_t CRC_Builder(char*);
 extern int MSB_Check(uint8_t);
 //State_machine.c
 extern void State_switch(int);
