@@ -24,6 +24,7 @@ uint8_t Lower;
 uint8_t first = 0;
 uint8_t reset = 0;
 uint8_t stop = 0;
+uint8_t end = 0;
 
 uint8_t rec = 0;
 //uint8_t
@@ -103,26 +104,37 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 
 void Msg_check(uint8_t byte)
 {
-	switch(byte)
+	if(end==1)
 	{
-	case 0x02:	//SOT
-		UART_puts(" Start of text");
-		rec =1;
-		break;
-	case 0x03:	//ETX
-		UART_puts(" End of text");
-		rec =0;
-		break;
-	case 0x04:	//EOT
-		UART_puts(" End of transmission\n");
+		UART_puts(" CRC\n");
 		xTimerStop(hSample_Timer,portMAX_DELAY);
-		rec =0;
+		xQueueSend(mBit_Queue,&byte,portMAX_DELAY);
 		xTaskNotifyGive(hData_name);
-		break;
-	default:
-		if(rec==1)
-			xQueueSend(mBit_Queue,&byte,portMAX_DELAY);
-		break;
+		end =0;
+	}
+	else
+	{
+		switch(byte)
+		{
+		case 0x02:	//SOT
+			UART_puts(" Start of text");
+			rec =1;
+			break;
+		case 0x03:	//ETX
+			UART_puts(" End of text");
+			rec =0;
+			end =1;
+			break;
+		case 0x04:	//EOT
+			UART_puts(" End of transmission");
+			end =1;
+			rec =0;
+			break;
+		default:
+			if(rec==1)
+				xQueueSend(mBit_Queue,&byte,portMAX_DELAY);
+			break;
+		}
 	}
 }
 
