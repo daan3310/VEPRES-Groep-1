@@ -55,13 +55,16 @@ uint8_t CRC_Builder(char *b, int length)
 				place |= (*b && 1);
 			}
 		}
-		if(length>8)
+		if(length-i>8)
 			b++;
 //		UART_puts("\r\n");
 //		UART_putint(place);
 	}
-	UART_puts("\nCRC: ");
-	UART_putint(place);
+	if(Uart_debug_out & TX_DEBUG_OUT)
+	{
+		UART_puts("\nCRC: ");
+		UART_putint(place);
+	}
 	return place;
 }
 

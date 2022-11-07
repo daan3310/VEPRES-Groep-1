@@ -259,6 +259,9 @@ void UART_menu (void *argument)
 				LCD_XY(0,1);
 				LCD_put(s);
 
+				// print naar terminal
+				UART_puts("\r\nTransmitting: ");
+				UART_puts(s);
 
 				// blijf data in de Q stoppen zolang *s niet NULL is
 				while(*s != 0)

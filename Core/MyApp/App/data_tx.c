@@ -187,6 +187,9 @@ void Send_data_task()
 		}
 
 		// Bouw CRC
+		if(length==63)
+			length++;
+//		UART_putint(length);
 		CrC = CRC_Builder(BitBuf,length);
 
 		for(i = 7; i >= 0; i--)
