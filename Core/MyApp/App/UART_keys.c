@@ -140,7 +140,7 @@ void UART_menu (void *argument)
 	UART_puts((char *)__func__); UART_puts("started\n\r");
   
 	if (!(hTask = xTaskGetHandle("Prep_data_task")))
-			error_HaltOS("Error UART_menu: Send_data_task handle");
+			error_HaltOS("Error UART_menu: Prep_data_task handle");
 
 	while (TRUE)
 	{
