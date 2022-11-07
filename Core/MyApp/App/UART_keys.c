@@ -215,31 +215,38 @@ void UART_menu (void *argument)
 				break;
 
 			case '8':
-				Sync_Bytes();// test case 2
+				Uart_debug_out ^= RX_DEBUG_OUT;
+				UART_puts("\r\nrx output = ");
+				UART_puts(Uart_debug_out & RX_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
 			case '9':
 				Toggle_Frequency();
 				break;
 
-			case 'C':
+			case 'C':		//CRC test via de terminal
 				input = atoi(s+2);
+
 				UART_puts("\r\nCRC-check voor:");
 				UART_putint(input);
 				UART_puts("\r\nResult: ");
+
 				for(i=0;i<8;i++)
 				{
-					arr[i] = (input>>(7-i)) & 1;
+					arr[i] = (input>>(7-i)) & 1; //Stop byte in bitarray
 //					UART_putint(arr[i]);
 				}
-				CRC_Builder(arr,8);
+
+				CRC_Builder(arr,8);	//Geef bitarray aan CRC functie
 				break;
 
-			case 'S':
+			case 'S':		//Verander de sample- en zendsnelheid via de terminal
 				input = atoi(s+2); // skip first 2 characters
+
 				UART_puts("\r\nSpeed changed to: ");
 				UART_putint(input); UART_puts(" ms");
-				Speed_calc(input);
+
+				Speed_calc(input);	//Geef nieuwe snelheid mee aan de snelheidscalculatie
 				break;
 
 			case 'M':

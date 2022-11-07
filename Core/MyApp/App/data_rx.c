@@ -1,10 +1,10 @@
 /**
-* @file data_rx.c
-* @brief hier worden bits omgezet naar characters
+* @file 		data_rx.c
+* @brief 		hier worden bits omgezet naar characters
 *
-* @author daniel roling
-
-* @date 17/10/2022
+* @author 		daniel roling
+* @co-author 	Stein van Vliet
+* @date 		17/10/2022
 */
 #include "main.h"
 #include "cmsis_os.h"
@@ -13,54 +13,63 @@
 
 
 /**
-* @ zet de ontvangen bits om in letters om te printen
-* @return void
+* @brief: 	Zet de ontvangen bits om in letters om te printen
+* @param: 	argument, ongebruikt
+* @return: 	void
 */
-void Data_rx_task()
+void Data_rx_task(void *argument)
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
-	char letter;
+
 	int i;
 	int length;
+
 	uint8_t CrC;
+
+	char letter;
 	char charbuf[8];
 	char bitbuf[64];
+
 	while(TRUE)
 	{
+		//Reset alle ints/arrays
 		i=0;
 		memset(charbuf, 0, 8);
 		memset(bitbuf,'\0',64);
-		osDelay(500); //Tom: Ik weet niet waarom maar deze moet relatief hoog zijn
+
+		osDelay(500);
+
+		//Wacht op task notification
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+		//Leeg de queue aan bytes
 		while(xQueueReceive(mBit_Queue, (void *) &letter, (TickType_t) 0))
 		{
 			i++;
-			if(i<9)
+			//Als er nog geen 9 bytes zijn en de byte niet NULL is
+			if(i<9 && letter!=0)
 			{
-				if(letter!=0)
-				{
+				if(Uart_debug_out & RX_DEBUG_OUT)
 					UART_putchar(letter);
-					charbuf[i-1]=letter;
-					length++;
-				}
+				charbuf[i-1]=letter;
+				length++;
 			}
+			//De 9de byte is de CRC, hier gebeurt de ontvangende check
 			else
 			{
-				Char_to_bits(bitbuf,charbuf,length);
-				CrC = CRC_Builder(bitbuf,length*8);
-				if(CrC == letter)
-					UART_puts("\nCRC checks out");
-				else
-					UART_puts("\nCRC Error!");
-//				UART_puts("\n");
-//				UART_putint(letter);
+				Char_to_bits(bitbuf,charbuf,length); 	//Maak van chararray een bitarray
+
+				CrC = CRC_Builder(bitbuf,length*8);		//Calculeer CRC van bitarray
+
+				//Debug
+				if(Uart_debug_out & RX_DEBUG_OUT)
+				{
+					if(CrC == letter)
+						UART_puts("\nCRC checks out");
+					else
+						UART_puts("\nCRC Error!");
+				}
 			}
 		}
 	}
 }
-
-//		if (Uart_debug_out & STUDENT_DEBUG_OUT)
-//		{
-//	       	sprintf(buf, "\r\n%s: %lu", __func__,uxQueueMessagesWaiting(mBit_Queue));
-//			UART_puts(buf);
-//    	}

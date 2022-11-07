@@ -1,10 +1,11 @@
-/*
- * State_machine.c
- *
- *  Created on: 16 Oct 2022
- *      Author: stein
- */
-
+/**
+* @file 		State_machine.c
+* @brief 		Ongebruikte functie, zou dienen als selectieboom voor de verschillende states van de ontvanger
+* 				Functie voornamelijk overgenomen door Sample.c en data_rx.c
+*
+* @author 		Stein van Vliet
+* @date 		16/10/2022
+*/
 #include "main.h"
 #include "cmsis_os.h"
 //#include "usb_host.h"
