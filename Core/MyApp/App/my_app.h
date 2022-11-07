@@ -30,7 +30,7 @@
 /// set software timer 500 msecs
 #define TIMER1_DELAY 500
 /// set data q max length
-#define QSIZE_DATA 64
+#define QSIZE_DATA 72
 
 /// alle handles
 /// handle voor UART-queue
