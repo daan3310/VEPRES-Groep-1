@@ -68,7 +68,7 @@ void ARM_keys_task (void *argument)
 	osThreadId_t    hTask;
 
 	if (!(hTask = xTaskGetHandle("Prep_data_task")))
-	error_HaltOS("Error UART_menu: Send_data_task handle");
+		error_HaltOS("Error UART_menu: Prep_data_task handle");
 
 	while(TRUE)
 	{

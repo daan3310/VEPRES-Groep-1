@@ -208,6 +208,12 @@ void UART_menu (void *argument)
 				UART_puts(Uart_debug_out & SAMPLE_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
+			case '7':
+				Uart_debug_out ^= TX_DEBUG_OUT;
+				UART_puts("\r\ntx output = ");
+				UART_puts(Uart_debug_out & TX_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
+
 			case '8':
 				Sync_Bytes();// test case 2
 				break;
