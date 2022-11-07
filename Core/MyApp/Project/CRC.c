@@ -17,44 +17,58 @@ uint8_t crc_byte;
 * @param: 	check_byte, byte voor CRC calc
 * @return: 	CRC_Builder
 */
-uint8_t CRC_Builder(char *b)
+uint8_t CRC_Builder(char *b, int length)
 {
 	uint8_t poly = 0b00000111;
 	uint8_t hold =0;
 	uint8_t place =0;
-	int length = strlen(b);
 
 	for(int j=8; j>0; j--,b++)
 	{
 		hold = *b;
-		hold <<= j-1;
+//		UART_putint(*b);
 		place |= hold;
+		if(j>1)
+			place <<=1;
 	}
-
-	for(int i=length-8;i>0;i--)
+//	UART_puts("\r\n");
+//	UART_putint(place);
+//	UART_puts("\r\n");
+//	UART_putint(length);
+	for(int i=0;i<length;i++)
 	{
-		b++;
+
 		if(MSB_Check(place))
 		{
 			place <<= 1;
-			place |= *b;
+			if(length-i>8)
+			{
+				place |= (*b && 1);
+			}
 			place ^= poly;
 		}
 		else
 		{
 			place <<= 1;
-			place |= *b;
+			if(length-i>8)
+			{
+				place |= (*b && 1);
+			}
 		}
+		if(length>8)
+			b++;
+//		UART_puts("\r\n");
+//		UART_putint(place);
 	}
-//	UART_puts("\nCRC: ");
-//	UART_putint(place);
+	UART_puts("\nCRC: ");
+	UART_putint(place);
 	return place;
 }
 
 /**
 * @brief: 	Checkt MSB voor een 1 of 0
 * @param:	byte
-* @return: 	NSB_Check
+* @return: 	MSB_Check
 */
 int MSB_Check(uint8_t check)
 {

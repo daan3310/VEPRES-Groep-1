@@ -131,10 +131,12 @@ void UART_keys_IRQ (void *argument)
 */
 void UART_menu (void *argument)
 {
+	char 	arr[8];
 	char   *s;
 	char   *tok = ",";  // token if command is more than 1 char
 	int     val1, val2;
 	int 	input;
+	int 	i;
 	osThreadId_t    hTask;
 
 	UART_puts((char *)__func__); UART_puts("started\n\r");
@@ -189,9 +191,9 @@ void UART_menu (void *argument)
 				break;
 
 			case '4':
-				Uart_debug_out ^= STUDENT_DEBUG_OUT; // toggle output on/off
-				UART_puts("\r\nstudent output = ");
-				UART_puts(Uart_debug_out & STUDENT_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				Uart_debug_out ^= TEST_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\ntest output = ");
+				UART_puts(Uart_debug_out & TEST_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
 			case '5':
@@ -214,9 +216,22 @@ void UART_menu (void *argument)
 				Toggle_Frequency();
 				break;
 
+			case 'C':
+				input = atoi(s+2);
+				UART_puts("\r\nCRC-check voor:");
+				UART_putint(input);
+				UART_puts("\r\nResult: ");
+				for(i=0;i<8;i++)
+				{
+					arr[i] = (input>>(7-i)) & 1;
+//					UART_putint(arr[i]);
+				}
+				CRC_Builder(arr,8);
+				break;
+
 			case 'S':
 				input = atoi(s+2); // skip first 2 characters
-				UART_puts("\r\n Speed changed to: ");
+				UART_puts("\r\nSpeed changed to: ");
 				UART_putint(input); UART_puts(" ms");
 				Speed_calc(input);
 				break;
