@@ -19,6 +19,7 @@ void Prep_data_task()
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char CharBuf[QSIZE_DATA];
 	char BitBuf[QSIZE_DATA*8];
+
 	char* p;
 	int pos = 0;
 	int length;
@@ -151,9 +152,14 @@ void Send_data_task()
 		// lengte aanvullen met NULL als dat nodig is
 		for(; i < 64; i++)
 		{
-			Change_Frequency(FREQLOW);
+			BitBuf[i] = 0;
+			if(BitBuf[i])
+				Change_Frequency(FREQHIGH);
+			else
+				Change_Frequency(FREQLOW);
 			osDelay(Samplerate);
 		}
+
 
 		if(amountWaiting != 0)
 		{
@@ -183,7 +189,8 @@ void Send_data_task()
 		}
 
 		// Bouw CRC
-		CrC = CRC_Builder(BitBuf);
+		CrC = CRC_Builder(BitBuf,length);
+
 		for(i = 7; i >= 0; i--)
 		{
 			if(((CrC >> i) & 0x01) == 1)
@@ -192,11 +199,6 @@ void Send_data_task()
 				Change_Frequency(FREQLOW);
 			osDelay(Samplerate);
 		}
-
-
-
-		// CRC sturen
-
 
 		// Stop de speaker
 		Toggle_Speaker(STOP);

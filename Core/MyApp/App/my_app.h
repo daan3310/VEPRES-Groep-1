@@ -76,7 +76,7 @@ extern int Uart_debug_out;
 /// bit 3: toggles uart stuff output
 #define UART_DEBUG_OUT    	0x04
 /// bit 4: toggles student stuff output
-#define STUDENT_DEBUG_OUT  	0x08
+#define TEST_DEBUG_OUT  	0x08
 /// bit 5: toggles reserved1 output
 #define SEND_DEBUG_OUT 		0x10
 /// bit 6: toggles reserved2 output
@@ -129,7 +129,7 @@ extern void Speed_init(int);
 //ExTim.c
 extern void Sampler_task(void *);
 //CRC.c
-extern uint8_t CRC_Builder(char*);
+extern uint8_t CRC_Builder(char*,int);
 extern int MSB_Check(uint8_t);
 //State_machine.c
 extern void State_switch(int);
