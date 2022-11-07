@@ -65,6 +65,7 @@ void ARM_keys_task (void *argument)
 {
 	uint32_t 	 key;
 	char stringBuf[30];
+	char* p = stringBuf;
 	osThreadId_t    hTask;
 
 	if (!(hTask = xTaskGetHandle("Prep_data_task")))
@@ -85,7 +86,7 @@ void ARM_keys_task (void *argument)
 		switch(key)
 		{
 		case 1:
-			sprintf(stringBuf, "Button 1");
+			p = "Button 1";
 			break;
 
 		case 2:
@@ -152,11 +153,12 @@ void ARM_keys_task (void *argument)
 			sprintf(stringBuf, "Default");
 			break;
 		}
-		char *s = stringBuf;
-		while(*s != 0)	//puts string to queue for tx
+
+		UART_puts(p);
+		while(*p != 0)	//puts string to queue for tx
 		{
-			xQueueSend(hChar_Queue, s, 0);
-			s++;
+			xQueueSend(hChar_Queue, p, 0);
+			p++;
 		}
 
 		if (Uart_debug_out & ARMKEYS_DEBUG_OUT)
