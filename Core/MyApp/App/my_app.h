@@ -80,7 +80,9 @@ extern int Uart_debug_out;
 /// bit 5: toggles reserved1 output
 #define SEND_DEBUG_OUT 		0x10
 /// bit 6: toggles reserved2 output
-#define SAMPLE_DEBUG_OUT 	0x24
+#define SAMPLE_DEBUG_OUT 	0x20
+/// bit 7: toggles tx debug
+#define TX_DEBUG_OUT		0x40
 
 /// Redefine pins om beter aan te geven waar het om gaat: gekleurde ledjes
 /// LD4_Pin

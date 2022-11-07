@@ -51,12 +51,12 @@ void Prep_data_task()
 			xQueueSend(hBit_Queue, p, 0);
 
 		// debug
-		if(pdFALSE)
+		if(Uart_debug_out & TX_DEBUG_OUT)
 		{
 			for(pos = 0; pos < length; pos++)
 			{
-				UART_putchar(CharBuf[pos]);
-				UART_puts("\n");
+//				UART_putchar(CharBuf[pos]);
+//				UART_puts("\n");
 			}
 		}
 	}
@@ -115,8 +115,6 @@ void Send_data_task()
 		// Start de speaker
 		Toggle_Speaker(START);
 
-//		Change_Frequency(FREQHIGH);
-//		osDelay(SAMPLERATE);
 		// SOC sturen
 		for(i = 0; i < sizeof(SOC); i++)
 		{
@@ -230,7 +228,7 @@ void Char_to_bits(char* BitTarget, char* CharSource, int length)
 		k = 0;
 	}
 
-	if(pdFALSE) // debug
+	if(Uart_debug_out & TX_DEBUG_OUT) // debug
 	{
 		UART_puts("\n");
 		for(i = 0; i < length*8; i++)

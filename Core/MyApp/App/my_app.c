@@ -74,8 +74,9 @@ void DisplayMenu(void)
 2: [on/off] ARM_keys output\r\n\
 3: [on/off] UART_keys output\r\n\
 4: [on/off] STUDENT output\r\n\
-5: [on/off] reserved output\r\n\
-7: [toggle] test functie\r\n\
+5: [on/off] SEND output\r\n\
+6: [on/off] SAMPLE output\r\n\
+7: [on/off] TX output\r\n\
 8: [toggle] Start Sync_Bytes\r\n\
 9: [toggle] switch between 2200 Hz and 2800 Hz \r\n\
 t: transmit any sentence, maximum length is 64\
