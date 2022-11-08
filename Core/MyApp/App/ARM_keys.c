@@ -73,6 +73,7 @@ void ARM_keys_task (void *argument)
 
 	while(TRUE)
 	{
+		memset(stringBuf, 0, 30);
 		// WAITING FOR users key
         xTaskNotifyWait (0x00,      		// Don't clear any notification bits on entry.
         		 	 	 0xffffffff, 		// ULONG_MAX, reset the notification value to 0 on exit.
@@ -90,63 +91,63 @@ void ARM_keys_task (void *argument)
 			break;
 
 		case 2:
-			sprintf(stringBuf, "Button 2");
+			p = "Button 2";
 			break;
 
 		case 3:
-			sprintf(stringBuf, "Button 3");
+			p = "Button 3";
 			break;
 
 		case 4:
-			sprintf(stringBuf, "Button 4");
+			p = "Button 4";
 			break;
 
 		case 5:
-			sprintf(stringBuf, "Button 5");
+			p = "Button 5";
 			break;
 
 		case 6:
-			sprintf(stringBuf, "Button 6");
+			p = "Button 6";
 			break;
 
 		case 7:
-			sprintf(stringBuf, "Button 7");
+			p = "Button 7";
 			break;
 
 		case 8:
-			sprintf(stringBuf, "Button 8");
+			p = "Button 8";
 			break;
 
 		case 9:
-			sprintf(stringBuf, "Button 9");
+			p = "Button 9";
 			break;
 
 		case 10:
-			sprintf(stringBuf, "Button 10");
+			p = "Button 10";
 			break;
 
 		case 11:
-			sprintf(stringBuf, "Button 11");
+			p = "Button 11";
 			break;
 
 		case 12:
-			sprintf(stringBuf, "Button 12");
+			p = "Button 12";
 			break;
 
 		case 13:
-			sprintf(stringBuf, "Button 13");
+			p = "Button 13";
 			break;
 
 		case 14:
-			sprintf(stringBuf, "Button 14");
+			p = "Button 14";
 			break;
 
 		case 15:
-			sprintf(stringBuf, "Button 15");
+			p = "Button 15";
 			break;
 
 		case 16:
-			sprintf(stringBuf, "Button 16");
+			p = "Button 16";
 			break;
 
 		default:
@@ -154,7 +155,13 @@ void ARM_keys_task (void *argument)
 			break;
 		}
 
+		UART_puts("\nTransmitting: ");
 		UART_puts(p);
+		LCD_clear();
+		LCD_put("Transmit");
+		LCD_XY(0,1);
+		LCD_put(p);
+
 		while(*p != 0)	//puts string to queue for tx
 		{
 			xQueueSend(hChar_Queue, p, 0);
@@ -165,10 +172,7 @@ void ARM_keys_task (void *argument)
 		{
 			UART_puts("\r\n\tARM_key pressed: "); UART_putint(key);
 		}
-		LCD_clear();
-		LCD_put("Transmit");
-		LCD_XY(0,1);
-		LCD_put(stringBuf);
+
 		xTaskNotifyGive(hTask);	//gives task to tx
 
      	taskYIELD(); // done, force context switch
