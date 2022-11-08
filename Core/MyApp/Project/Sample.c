@@ -243,14 +243,14 @@ void Period_time(void)
 				//Als timer uitstaat zet hem aan
 				if(first==0)
 				{
-					xTimerStartFromISR(hSample_Timer,xHigherPriorityTaskWoken);
+					xTimerStartFromISR(hSample_Timer, (BaseType_t *)xHigherPriorityTaskWoken );
 					first=1;
 					buf=0;
 				}
 				//Anders reset de timer
 				else
 				{
-					xTimerResetFromISR(hSample_Timer,xHigherPriorityTaskWoken);
+					xTimerResetFromISR(hSample_Timer,(BaseType_t *)xHigherPriorityTaskWoken);
 					TCycle = 0;
 					buf=0;
 				}
