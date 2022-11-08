@@ -14,7 +14,7 @@ extern unsigned int Samplerate;
  * @brief receives data from the CharQ, sent by UART keys.
  * Converts the data from characters to bits, then sends data to bitQ
  */
-void Prep_data_task()
+void Prep_data_task(void *argument)
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char CharBuf[QSIZE_DATA];
@@ -70,7 +70,7 @@ void Prep_data_task()
  * Mogelijk later vervangen door een interrupt met timer,
  * zeker als SAMPLE_RATE korter wordt of als dit niet betrouwbaar genoeg is
  */
-void Send_data_task()
+void Send_data_task(void *argument)
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char BitBuf[QSIZE_DATA];
@@ -186,9 +186,14 @@ void Send_data_task()
 			}
 		}
 
+		//Voor het geval er 8 bytes meekomen, corrigeer de lengte van bitarray
+		if(length==63)
+			length++;
+
 		// Bouw CRC
 		CrC = CRC_Builder(BitBuf,length);
 
+		// Stuur CRC mee
 		for(i = 7; i >= 0; i--)
 		{
 			if(((CrC >> i) & 0x01) == 1)
@@ -203,7 +208,10 @@ void Send_data_task()
 
 		// zet t ledje weer uit als we klaar zijn
 		HAL_GPIO_TogglePin(GPIOD, LEDRED);
-//		UART_puts("\nNew transmission");
+
+		//Debug
+		if(Uart_debug_out & TX_DEBUG_OUT)
+			UART_puts("\nNew transmission");
 	}
 }
 

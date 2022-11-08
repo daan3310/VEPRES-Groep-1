@@ -103,7 +103,7 @@ void CreateHandles(void)
 
 /**
 * @brief Creates handle names voor deze applicatie die specifiek na task creation
-* 			moet worden gerunned
+* 			moet worden gerund
 * @return void
 */
 void GetName()
