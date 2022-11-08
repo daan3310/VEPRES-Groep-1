@@ -157,7 +157,7 @@ extern void Sync_Bytes();
 extern void Toggle_Speaker();
 
 //data_tx.c
-extern void Prep_data_task(void *);
-extern void Send_data_task(void *);
+extern void Prep_data_task();
+extern void Send_data_task();
 extern void Char_to_bits(char*, char*, int);
 

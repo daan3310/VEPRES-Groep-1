@@ -221,6 +221,7 @@ void UART_menu (void *argument)
 				break;
 
 			case '9':
+				Toggle_Speaker(START);
 				Toggle_Frequency();
 				break;
 
@@ -304,6 +305,7 @@ void UART_menu (void *argument)
 				UART_puts("\r\n Frequency set to: ");
 				UART_putint(input);
 				Change_Frequency(input);
+				Toggle_Speaker(START);
 				break;
 
 			case 'L':

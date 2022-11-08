@@ -14,7 +14,7 @@ extern unsigned int Samplerate;
  * @brief receives data from the CharQ, sent by UART keys.
  * Converts the data from characters to bits, then sends data to bitQ
  */
-void Prep_data_task(void *argument)
+void Prep_data_task()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char CharBuf[QSIZE_DATA];
@@ -57,8 +57,8 @@ void Prep_data_task(void *argument)
 		{
 			for(pos = 0; pos < length; pos++)
 			{
+				UART_puts("\n\r");
 				UART_putchar(CharBuf[pos]);
-				UART_puts("\n");
 			}
 		}
 	}
@@ -72,7 +72,7 @@ void Prep_data_task(void *argument)
  * Mogelijk later vervangen door een interrupt met timer,
  * zeker als SAMPLE_RATE korter wordt of als dit niet betrouwbaar genoeg is
  */
-void Send_data_task(void *argument)
+void Send_data_task()
 {
 	UART_puts((char *)__func__); UART_puts(" started\r\n");
 	char BitBuf[QSIZE_DATA];
@@ -187,7 +187,7 @@ void Send_data_task(void *argument)
 			}
 		}
 
-		//Voor het geval er 8 bytes meekomen, corrigeer de lengte van bitarray
+		// Voor het geval er 8 bytes meekomen, corrigeer de lengte van bitarray
 		if(length==63)
 			length++;
 
@@ -212,7 +212,7 @@ void Send_data_task(void *argument)
 
 		//Debug
 		if(Uart_debug_out & TX_DEBUG_OUT)
-			UART_puts("\nNew transmission");
+			UART_puts("\n\rNew transmission");
 	}
 }
 
@@ -245,7 +245,7 @@ void Char_to_bits(char* BitTarget, char* CharSource, int length)
 
 	if(Uart_debug_out & TX_DEBUG_OUT) // debug
 	{
-		UART_puts("\n");
+		UART_puts("\n\r");
 		for(i = 0; i < length*8; i++)
 		{
 			UART_putint((int) BitTarget[i]);
@@ -253,7 +253,7 @@ void Char_to_bits(char* BitTarget, char* CharSource, int length)
 			{
 				UART_puts(" ");
 				UART_putchar(CharSource[((i+1)/8)-1]);
-				UART_puts("\n");
+				UART_puts("\n\r");
 			}
 		}
 	}

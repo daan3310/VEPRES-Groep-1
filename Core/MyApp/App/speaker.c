@@ -1,8 +1,8 @@
 /*
  * speaker.c
  *
- *  Created on: Oct 5, 2022
- *      Author: Tom Selier
+ * Created on: Oct 5, 2022
+ * Author: 	Tom Selier
  */
 #include "main.h"
 #include "cmsis_os.h"
@@ -18,9 +18,12 @@ extern unsigned int Samplerate;
  */
 void Toggle_Speaker(int state)
 {
-	if(state) //START
+	// START
+	if(state)
 		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
-	else // STOP
+
+	// STOP
+	else
 		HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_3);
 }
 
@@ -31,33 +34,39 @@ void Toggle_Speaker(int state)
  */
 void Speaker_Init()
 {
-//	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 	TIM3->ARR = 1000-1;
 	TIM3->CCR3 = 500-1;
 }
 
 /**
- * @brief Veranderd de frequentie van timer 3 op pin pc8 (buzzer)
- * @param int De gewenste frequentie
+ * @brief Veranderd de pwm frequentie van timer 3 op pin pc8 (buzzer)
+ * @param int De gewenste frequentie in Hz
  * @return void
  */
 void Change_Frequency(int frequency)
 {
+	// verander de pwm frequentie
 	TIM3->ARR 	= 1000000 / frequency - 1;
-	TIM3->CCR3 	= 1000000 / (frequency * 2) - 1;
-	TIM3->CNT = 0; // set count to 0 to avoid register overflow
 
+	// duty cycle altijd op 50%
+	TIM3->CCR3 	= 1000000 / (frequency * 2) - 1;
+
+	// zet counter op 0 om te voorkomen dat de counter groter is
+	// dan de register waarde
+	TIM3->CNT = 0;
+
+	// debug werkt alleen bij operationele frequenties
+	// 2200 Hz of 2800 Hz
 	if(Uart_debug_out & SEND_DEBUG_OUT)
 	{
+		UART_puts("\r\n");
+
 		if(frequency == FREQHIGH)
-		{
 			UART_putint(1);
-		}
 		else if(frequency == FREQLOW)
-		{
 			UART_putint(0);
-		}
-		UART_puts("\n");
+		else
+			UART_puts("Change_Frequency: Frequentie veranderd naar niet standaard frequentie.");
 	}
 }
 
@@ -88,6 +97,7 @@ void Toggle_Frequency()
  * @brief toggles between high and low bytes*samplerate times, blocking
  * @param int amount of bytes to transmit
  * @return void
+ * DEPRECATED
  */
 void Sync_Bytes(int bytes)
 {
