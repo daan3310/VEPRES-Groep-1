@@ -28,6 +28,8 @@ void Prep_data_task(void *argument)
 	{
 		// wacht tot er daadwerkelijk data binnenkomt
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+		// pos resetten
 		pos = 0;
 
 		// leeg de character buf in voorbereiding tot data
@@ -55,8 +57,8 @@ void Prep_data_task(void *argument)
 		{
 			for(pos = 0; pos < length; pos++)
 			{
-//				UART_putchar(CharBuf[pos]);
-//				UART_puts("\n");
+				UART_putchar(CharBuf[pos]);
+				UART_puts("\n");
 			}
 		}
 	}
@@ -88,11 +90,8 @@ void Send_data_task(void *argument)
 
 	while(TRUE)
 	{
-		// tijdelijke 2 sec delay zodat je meerdere datablokken hoort
-		// uiteindelijk kan deze veel korter
+		// 100ms delay om rx tijd te geven data te verwerken
 		osDelay(100);
-
-		// opslaan of er nog data in de Q zit
 
 
 		// skip de task als de Q leeg is
@@ -135,7 +134,7 @@ void Send_data_task(void *argument)
 		}
 
 		// verstuur de bits met een snelheid van samplerate
-		for(i = 0; i <=length; i++)
+		for(i = 0; i <= length; i++)
 		{
 			if(BitBuf[i])
 				Change_Frequency(FREQHIGH);
@@ -150,7 +149,9 @@ void Send_data_task(void *argument)
 		// lengte aanvullen met NULL als dat nodig is
 		for(; i < 64; i++)
 		{
+			//BitBuf aanvullen met 0 voor CRC berekeningen
 			BitBuf[i] = 0;
+
 			if(BitBuf[i])
 				Change_Frequency(FREQHIGH);
 			else
@@ -159,6 +160,7 @@ void Send_data_task(void *argument)
 		}
 
 
+		// Als er nog iets in de Q staat, stuur ETX
 		if(amountWaiting != 0)
 		{
 			// ETX sturen als er nog berichten in de Q zitten
@@ -170,12 +172,11 @@ void Send_data_task(void *argument)
 					Change_Frequency(FREQLOW);
 				osDelay(Samplerate);
 			}
-
 		}
 
-		if(amountWaiting ==0)
+		// Als er niks meer in de Q staat, stuur EOT
+		if(amountWaiting == 0)
 		{
-		// EOT sturen als de Q leeg is
 			for(i = 7; i >= 0; i--)
 			{
 				if(((EOT >> i) & 0x01) == 1)
@@ -190,7 +191,7 @@ void Send_data_task(void *argument)
 		if(length==63)
 			length++;
 
-		// Bouw CRC
+		// Bouw CRC op basis van BitBuf en lengte
 		CrC = CRC_Builder(BitBuf,length);
 
 		// Stuur CRC mee
@@ -217,22 +218,28 @@ void Send_data_task(void *argument)
 
 
 /**
- * @brief functie die char array omzet naar bits array
+ * @brief functie die char array omzet naar bits array, output in big endian
  * @param char* bit array, target
  * @param char* char array, source
  * @param int 	lengte van de CHAR array
  */
 void Char_to_bits(char* BitTarget, char* CharSource, int length)
 {
+	// i iterator bit target te vullen
+	// j iterator char source bij te houden
+	// k iterator bit shift
 	int i, j, k = 0;
 
-	for(j = 0; j < length; j++) // per letter
+	 // Per letter door CharSource
+	for(j = 0; j < length; j++)
 	{
-		i = 8*(j+1)-1; // start per letter op 7, 15, 23 etc
-		for(; k < 8; i--, k++) // per bit
-		{
+		// start per letter op 7, 15, 23 etc
+		i = 8*(j+1)-1;
+
+		// per bit uitlezen
+		for(; k < 8; i--, k++)
 			BitTarget[i] = (CharSource[j] >> k) & 0x01;
-		}
+
 		k = 0;
 	}
 
