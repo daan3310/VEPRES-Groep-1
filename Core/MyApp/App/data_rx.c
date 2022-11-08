@@ -52,7 +52,7 @@ void Data_rx_task(void *argument)
 			{
 				if((Uart_debug_out & RX_DEBUG_OUT)&&letter!=0)
 					UART_putchar(letter);
-				s,10charbuf[i-1]=letter;
+				charbuf[i-1]=letter;
 				length++;
 			}
 			//De 9de byte is de CRC, hier gebeurt de ontvangende check
