@@ -131,10 +131,12 @@ void UART_keys_IRQ (void *argument)
 */
 void UART_menu (void *argument)
 {
+	char 	arr[8];
 	char   *s;
 	char   *tok = ",";  // token if command is more than 1 char
 	int     val1, val2;
 	int 	input;
+	int 	i;
 	osThreadId_t    hTask;
 
 	UART_puts((char *)__func__); UART_puts("started\n\r");
@@ -189,9 +191,9 @@ void UART_menu (void *argument)
 				break;
 
 			case '4':
-				Uart_debug_out ^= STUDENT_DEBUG_OUT; // toggle output on/off
-				UART_puts("\r\nstudent output = ");
-				UART_puts(Uart_debug_out & STUDENT_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				Uart_debug_out ^= TEST_DEBUG_OUT; // toggle output on/off
+				UART_puts("\r\ntest output = ");
+				UART_puts(Uart_debug_out & TEST_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
 			case '5':
@@ -206,19 +208,46 @@ void UART_menu (void *argument)
 				UART_puts(Uart_debug_out & SAMPLE_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
+			case '7':
+				Uart_debug_out ^= TX_DEBUG_OUT;
+				UART_puts("\r\ntx output = ");
+				UART_puts(Uart_debug_out & TX_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
+				break;
+
 			case '8':
-				Sync_Bytes();// test case 2
+				Uart_debug_out ^= RX_DEBUG_OUT;
+				UART_puts("\r\nrx output = ");
+				UART_puts(Uart_debug_out & RX_DEBUG_OUT ? "ON\r\n" : "OFF\r\n");
 				break;
 
 			case '9':
+				Toggle_Speaker(START);
 				Toggle_Frequency();
 				break;
 
-			case 'S':
+			case 'C':		//CRC test via de terminal
+				input = atoi(s+2);
+
+				UART_puts("\r\nCRC-check voor:");
+				UART_putint(input);
+				UART_puts("\r\nResult: ");
+
+				for(i=0;i<8;i++)
+				{
+					arr[i] = (input>>(7-i)) & 1; //Stop byte in bitarray
+//					UART_putint(arr[i]);
+				}
+
+				CRC_Builder(arr,8);	//Geef bitarray aan CRC functie
+				break;
+
+			case 'S':		//Verander de sample- en zendsnelheid via de terminal
 				input = atoi(s+2); // skip first 2 characters
-				UART_puts("\r\n Speed changed to: ");
+
+				UART_puts("\r\nSpeed changed to: ");
 				UART_putint(input); UART_puts(" ms");
-				Speed_calc(input);
+
+				Speed_calc(input);	//Geef nieuwe snelheid mee aan de snelheidscalculatie
 				break;
 
 			case 'M':
@@ -238,6 +267,9 @@ void UART_menu (void *argument)
 				LCD_XY(0,1);
 				LCD_put(s);
 
+				// print naar terminal
+				UART_puts("\r\nTransmitting: ");
+				UART_puts(s);
 
 				// blijf data in de Q stoppen zolang *s niet NULL is
 				while(*s != 0)
@@ -273,6 +305,7 @@ void UART_menu (void *argument)
 				UART_puts("\r\n Frequency set to: ");
 				UART_putint(input);
 				Change_Frequency(input);
+				Toggle_Speaker(START);
 				break;
 
 			case 'L':

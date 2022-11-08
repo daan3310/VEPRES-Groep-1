@@ -76,11 +76,15 @@ extern int Uart_debug_out;
 /// bit 3: toggles uart stuff output
 #define UART_DEBUG_OUT    	0x04
 /// bit 4: toggles student stuff output
-#define STUDENT_DEBUG_OUT  	0x08
+#define TEST_DEBUG_OUT  	0x08
 /// bit 5: toggles reserved1 output
 #define SEND_DEBUG_OUT 		0x10
 /// bit 6: toggles reserved2 output
-#define SAMPLE_DEBUG_OUT 	0x24
+#define SAMPLE_DEBUG_OUT 	0x20
+/// bit 7: toggles tx debug
+#define TX_DEBUG_OUT		0x40
+/// bit 8: toggles rx debug
+#define RX_DEBUG_OUT		0x80
 
 /// Redefine pins om beter aan te geven waar het om gaat: gekleurde ledjes
 /// LD4_Pin
@@ -118,19 +122,24 @@ extern void UART_menu     (void *);
 
 // student.c
 extern void Student_task1 (void *);
+
 // data_rx.c
-extern void Data_rx_task ();
+extern void Data_rx_task (void *);
+
 // Sample.c
 extern void Sample_Handler(TimerHandle_t);
 extern void Msg_check(uint8_t);
 extern void Period_time(void);
 extern void Speed_calc(int);
 extern void Speed_init(int);
+
 //ExTim.c
 extern void Sampler_task(void *);
+
 //CRC.c
-extern uint8_t CRC_Builder(char*);
+extern uint8_t CRC_Builder(char*,int);
 extern int MSB_Check(uint8_t);
+
 //State_machine.c
 extern void State_switch(int);
 

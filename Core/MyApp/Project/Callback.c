@@ -1,9 +1,11 @@
-/*
- * Callback.c
- *
- *  Created on: Oct 6, 2022
- *      Author: stein
- */
+/**
+* @file 	Callback.c
+* @brief 	Hier wordt de STM EXTI Callbackfunctie herschreven voor aanroepen van gemaakte functies
+*
+* @author 	Stein van Vliet
+
+* @date 	06/10/2022
+*/
 
 #include "main.h"
 #include "cmsis_os.h"
@@ -18,11 +20,13 @@
 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+	//callback voor external testpin
 	if(GPIO_Pin == GPIO_PIN_7)
 	{
 		HAL_GPIO_TogglePin(GPIOD, LEDORANGE);
 	}
 
+	//callback voor external synchronisatiepin
 	if(GPIO_Pin == GPIO_PIN_10)
 	{
 		Period_time();

@@ -74,16 +74,19 @@ void DisplayMenu(void)
 2: [on/off] ARM_keys output\r\n\
 3: [on/off] UART_keys output\r\n\
 4: [on/off] STUDENT output\r\n\
-5: [on/off] reserved output\r\n\
-7: [toggle] test functie\r\n\
-8: [toggle] Start Sync_Bytes\r\n\
+5: [on/off] SEND output\r\n\
+6: [on/off] SAMPLE output\r\n\
+7: [on/off] TX output\r\n\
+8: [on/off] RX output\r\n\
 9: [toggle] switch between 2200 Hz and 2800 Hz \r\n\
 t: transmit any sentence, maximum length is 64\
+c: check CRC of any given byte, eg. 'c,40'\
+s: set speed for sampling and sending data (in milliseconds), eg. s,400\
 p: change Priority of task, eg. 'p,7,20' sets priority of task 7 to 20\r\n\
 d: display Task-data (number, priority, stack usage)\r\n\
-b: change frequency (default 1 kHz), eg. 'b,2500'\r\n\
-l: turns led off\r\n\
-o: turns led on\r\n\
+b: change frequency, eg. 'b,2500'\r\n\
+l: turn the LCD display off\r\n\
+o: turn the LCD display onn\r\n\
 ===================================================================\r\n";
 
     UART_puts(menu);

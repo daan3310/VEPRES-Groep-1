@@ -72,7 +72,7 @@ TASKDATA tasks[] =
 
 
 	// data_tx.c
-{ Prep_data_task,NULL, .attr.name = "Prep_data_task",	.attr.stack_size = 128 * 6, .attr.priority = osPriorityBelowNormal7 },
+{ Prep_data_task,NULL, .attr.name = "Prep_data_task",	.attr.stack_size = 128 * 12, .attr.priority = osPriorityBelowNormal7 },
 { Send_data_task,NULL, .attr.name = "Send_data_task",	.attr.stack_size = 128 * 6, .attr.priority = osPriorityRealtime7 },
 
   // deze laatste niet wissen, wordt gebruik als 'terminator' in loops
