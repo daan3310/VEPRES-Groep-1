@@ -235,7 +235,7 @@ void UART_menu (void *argument)
 				for(i=0;i<8;i++)
 				{
 					arr[i] = (input>>(7-i)) & 1; //Stop byte in bitarray
-//					UART_putint(arr[i]);
+					UART_putint(arr[i]);
 				}
 
 				CRC_Builder(arr,8);	//Geef bitarray aan CRC functie

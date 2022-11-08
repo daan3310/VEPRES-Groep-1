@@ -34,7 +34,7 @@ uint8_t CRC_Builder(char *b, int length)
 		if(j>1)
 			place <<=1;
 	}
-
+//	UART_putint(place);
 	//Gaat CRC berekening af over de array
 	for(int i=0;i<length;i++)
 	{

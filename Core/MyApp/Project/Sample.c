@@ -89,7 +89,8 @@ void Sample_Handler(TimerHandle_t hSample_Timer)
 		if(buf!=253)
 		{
 			UART_puts("\nbyte received: ");
-//			UART_putint(buf);
+			UART_putint(buf);
+			UART_puts("\t");
 			UART_putchar(buf);
 			Msg_check(buf);
 		}
@@ -218,8 +219,11 @@ void Period_time(void)
 		//Case 1, check of een puls laag volgt en (her)start de timer
 		case 1:
 			//Timer safety en check periodetijd
-			if(((Current-Uptime)<50)&&(Period > 400 && Period < 500))
-				Startsign++;
+			if((Current-Uptime)<50)
+			{
+				if(Period > 400 && Period < 500)
+					Startsign++;
+			}
 			else
 			{
 				UP = 0;
